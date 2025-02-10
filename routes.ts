@@ -6,8 +6,8 @@
 
 export const publicRoutes = [
     "/",
-    "/email-verification",
-    "/reset-password",
+    "/admin",
+    "/dashboard",
     "/password-reset-email-redirect",
     "/api/auth/register",
   ];
@@ -19,7 +19,6 @@ export const publicRoutes = [
    * @type {string[]}
    */
   export const protectedRoutes = [
-    "/dashboard",
     "/dashboard/calendar",
     "/dashboard/compose",
     "/dashboard/library",

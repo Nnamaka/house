@@ -11,6 +11,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model Account {
@@ -147,4 +148,13 @@ enum FinancingType {
   MORTGAGE
   LEASE_TO_OWN
   UNDECIDED
+}
+
+model House {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  price       Float
+  images      String[]
+  features    String[]
 }
