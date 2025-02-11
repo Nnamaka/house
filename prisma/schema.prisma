@@ -158,3 +158,10 @@ model House {
   images      String[]
   features    String[]
 }
+
+model MagicLink {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  token     String   @unique
+  expiresAt DateTime
+}

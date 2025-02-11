@@ -18,11 +18,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
     async jwt({ token, user, account, profile }) {
       if (user || account) {
+        token.role = "admin";
         token.accessToken = account?.access_token;
         token.id = account?.id_token;
         token.email = user.email; // Attach email to the JWT token
         token.picture = profile?.picture;
-        console.log("Account ✅", profile)
       }
       return token;
 
@@ -38,6 +38,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     },
     async session({ session, token }) {
       if (token.sub && session.user) {
+       
         session.user.id = token.sub;
         session.user.email = token.email as string;
         session.user.image = token.picture;

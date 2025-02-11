@@ -15,7 +15,9 @@ export default auth((req) => {
   const { nextUrl } = req;
 
   const isAuthRoute = authRoutes.includes(nextUrl.pathname);
+
   const isLoggedIn = !!req.auth;
+  // const { token } = req.auth || {};
 
   if (isAuthRoute && isLoggedIn) {
     return Response.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
@@ -31,18 +33,9 @@ export default auth((req) => {
 
   const isProtectedRoute = protectedRoutes.includes(nextUrl.pathname);
   if (isProtectedRoute && !isLoggedIn) {
-    return Response.redirect(new URL("/", nextUrl)); // Redirect to login (or any other route)
+    return Response.redirect(new URL("/admin/login", nextUrl)); // Redirect to login (or any other route)
   }
 
-  // if (!isLoggedIn && !isPublicRoute) {
-  //   // return Response.redirect(new URL("/", nextUrl));
-  //   return;
-  // }
-
-  // if (!isLoggedIn && isProtectedRoute) {
-  //   // Redirect to the login page if accessing protected routes without being logged in
-  //   return Response.redirect(new URL("/", nextUrl));
-  // }
   return;
 });
 

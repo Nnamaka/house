@@ -6,10 +6,10 @@
 
 export const publicRoutes = [
     "/",
-    "/admin",
-    "/dashboard",
-    "/password-reset-email-redirect",
-    "/api/auth/register",
+    "/admin/login",
+    "/api/magic-link",
+    "/api/verify-magic-link",
+    "admin/verify",
   ];
   
   /**
@@ -19,20 +19,17 @@ export const publicRoutes = [
    * @type {string[]}
    */
   export const protectedRoutes = [
-    "/dashboard/calendar",
-    "/dashboard/compose",
-    "/dashboard/library",
-    "/dashboard/settings",
+    "/admin/dashboard",
   ];
   /**
    * This array of routes are used for authentication
    * @type {string[]}
    */
   export const authRoutes = [
+    "/admin/login",
     "/login",
     "/signup",
     "/api/users",
-    "/api/auth/register",
   ];
   
   /**
@@ -46,5 +43,5 @@ export const publicRoutes = [
    * Default redirect path after login
    * @type {string}
    */
-  export const DEFAULT_LOGIN_REDIRECT = "/dashboard/calendar";
+  export const DEFAULT_LOGIN_REDIRECT = "/admin/dashboard";
   

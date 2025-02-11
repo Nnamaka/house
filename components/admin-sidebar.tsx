@@ -6,8 +6,8 @@ import { Sidebar } from "@/components/ui/sidebar";
 import { Users, Home, LogOut } from "lucide-react";
 
 const navItems = [
-  { name: "Users", href: "/admin/users", icon: Users },
-  { name: "Houses", href: "/admin/houses", icon: Home },
+  { name: "Users", href: "/admin/dashboard/users", icon: Users },
+  { name: "Houses", href: "/admin/dashboard/houses", icon: Home },
 ];
 
 export function AppSidebar() {
