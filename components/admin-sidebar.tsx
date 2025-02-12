@@ -1,43 +1,56 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { Sidebar } from "@/components/ui/sidebar";
-import { Users, Home, LogOut } from "lucide-react";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@/components/ui/sidebar";
+import { Users, Home } from "lucide-react";
+import { NavMain } from "./nav-main";
+import { useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation";
 
 const navItems = [
-  { name: "Users", href: "/admin/dashboard/users", icon: Users },
-  { name: "Houses", href: "/admin/dashboard/houses", icon: Home },
+  {
+    title: "Users",
+    url: "/admin/dashboard/users",
+    icon: Users,
+    isActive: true,
+  },
+  { title: "Houses", url: "/admin/dashboard/houses", icon: Home },
 ];
 
-export function AppSidebar() {
+export function AppSidebar({
+  currentPath,
+  ...props
+}: React.ComponentProps<typeof Sidebar> & { currentPath: string }) {
   const pathname = usePathname();
+  const router = useRouter();
 
+  useEffect(() => {
+    if (pathname === "/admin/dashboard") {
+      router.push("/admin/dashboard/users");
+    }
+  });
   return (
-    <Sidebar className="bg-gray-900 text-white w-64">
-      <div className="p-6">
-        <h2 className="text-2xl font-bold mb-6">Admin</h2>
-        <nav>
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`flex items-center gap-2 p-3 rounded-lg transition ${
-                pathname === item.href ? "bg-gray-700" : "hover:bg-gray-800"
-              }`}
-            >
-              <item.icon className="w-5 h-5" />
-              {item.name}
+    <Sidebar collapsible="icon" {...props}>
+      <SidebarMenu>
+        <SidebarMenuItem>
+          <SidebarMenuButton size="lg" asChild>
+            <Link href="/" className="flex items-center justify-center">
+              <div className="grid flex-1 text-left text-sm leading-tight">
+                <span className="truncate font-semibold">QualityProperty</span>
+              </div>
             </Link>
-          ))}
-        </nav>
-        <div className="mt-6">
-          <Link href="/logout" className="flex items-center gap-2 p-3 rounded-lg transition hover:bg-red-600">
-            <LogOut className="w-5 h-5" />
-            Logout
-          </Link>
-        </div>
-      </div>
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      </SidebarMenu>
+      <SidebarContent>
+        <NavMain items={navItems} currentPath={currentPath} />
+      </SidebarContent>
     </Sidebar>
   );
 }
