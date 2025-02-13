@@ -9,8 +9,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
 
@@ -45,18 +45,18 @@ model User {
   id            String    @id @default(cuid())
   name          String?
   email         String?   @unique
-  password      String? 
+  password      String?
   emailVerified DateTime?
   image         String?
   role          UserRole  @default(CUSTOMER)
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
-  
+
   // Relations
-  accounts      Account[]
-  sessions      Session[]
-  quotes        QuoteRequest[]
-  listings      TinyHouse[]    // For admin users who create listings
+  accounts Account[]
+  sessions Session[]
+  quotes   QuoteRequest[]
+  listings TinyHouse[] // For admin users who create listings
 }
 
 enum UserRole {
@@ -74,25 +74,25 @@ model VerificationToken {
 
 // Tiny House Models
 model TinyHouse {
-  id          String   @id @default(cuid())
+  id          String        @id @default(cuid())
   title       String
-  description String   @db.Text
-  price       Decimal  @db.Decimal(10, 2)
+  description String        @db.Text
+  price       Decimal       @db.Decimal(10, 2)
   squareFeet  Int
   bedrooms    Int
   bathrooms   Int
   features    String[]
   images      String[] // URLs to images
   status      ListingStatus @default(AVAILABLE)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
 
   // Metadata
   createdById String
-  createdBy   User     @relation(fields: [createdById], references: [id])
-  
+  createdBy   User   @relation(fields: [createdById], references: [id])
+
   // Relations
-  quotes      QuoteRequest[]
+  // quotes QuoteRequest[]
 
   @@index([status])
 }
@@ -104,32 +104,30 @@ enum ListingStatus {
 }
 
 model QuoteRequest {
-  id        String   @id @default(cuid())
+  id        String      @id @default(cuid())
   status    QuoteStatus @default(PENDING)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
 
   // User Information (could be different from auth user)
-  userId    String?  // Optional: user might not be logged in
-  user      User?    @relation(fields: [userId], references: [id])
-  
+  userId String? // Optional: user might not be logged in
+  user   User?   @relation(fields: [userId], references: [id])
+
   // Required contact information
-  fullName  String
+  firstName String
+  lastName  String
   email     String
   phone     String
-  message   String   @db.Text
+  customizationRequests String   @db.Text 
 
   // Financing Information
   preferredFinancing FinancingType?
   desiredMoveInDate  DateTime?
-  estimatedBudget    Decimal?     @db.Decimal(10, 2)
+  estimatedBudget    Decimal?       @db.Decimal(10, 2)
 
   // Related House
-  houseId   String
-  house     TinyHouse @relation(fields: [houseId], references: [id])
-
-  // Admin notes
-  adminNotes String? @db.Text
+  houseId String
+  // house   TinyHouse @relation(fields: [houseId], references: [id])
 
   @@index([status])
   @@index([email])

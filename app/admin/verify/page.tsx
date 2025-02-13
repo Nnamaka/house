@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 
-export default function VerifyMagicLink() {
+ function VerifyMagicLink() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
@@ -55,5 +55,13 @@ export default function VerifyMagicLink() {
         <p className="text-red-500">{error}</p>
       )}
     </div>
+  );
+}
+
+export default function VerifyMagicLinkSuspence() {
+  return (
+    <Suspense fallback={<p>Loading...</p>}>
+      <VerifyMagicLink />
+    </Suspense>
   );
 }
