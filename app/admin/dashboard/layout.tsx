@@ -37,7 +37,7 @@ export default function AdminLayout({
           <Breadcrumb>
             <BreadcrumbList>
               <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink href="/admin/dashboard/users">
+                <BreadcrumbLink href="/admin/dashboard/quotes">
                   Dashboard
                 </BreadcrumbLink>
               </BreadcrumbItem>

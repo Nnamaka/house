@@ -19,6 +19,7 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
+
     const newQuote = await prisma.quoteRequest.create({
       data: {
         firstName: data.firstName,
@@ -26,7 +27,16 @@ export async function POST(req: Request) {
         email: data.email,
         phone: data.phone,
         customizationRequests: data.customizationRequests,
-        houseId: data.houseId, // Ensure this is provided
+        houseId: data.houseId,
+        // Optional fields
+        preferredFinancing: data.preferredFinancing || undefined,
+        desiredMoveInDate: data.desiredMoveInDate
+          ? new Date(data.desiredMoveInDate)
+          : undefined,
+        estimatedBudget: data.estimatedBudget
+          ? parseFloat(data.estimatedBudget)
+          : undefined,
+        // Default status is PENDING as defined in the schema
       },
     });
 

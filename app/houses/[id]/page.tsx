@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { QuoteModal } from "@/components/QuoteModal";
+import CreateQuoteModal from "@/components/CreateQuoteModal";
 import { houses1 } from "@/data/houses";
 
 // interface House {
@@ -65,7 +65,7 @@ export default function HouseDetailPage() {
 
       <Button className="mt-6" onClick={() => setShowModal(true)}>Get Quote</Button>
 
-      {showModal && <QuoteModal houseId={house.id} onClose={() => setShowModal(false)} />}
+      {showModal && <CreateQuoteModal api={true} isOpen={showModal} houseId={house.id} onClose={() => setShowModal(false)} />}
     </div>
   );
 }

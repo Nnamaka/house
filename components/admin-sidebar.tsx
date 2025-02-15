@@ -15,8 +15,8 @@ import { usePathname, useRouter } from "next/navigation";
 
 const navItems = [
   {
-    title: "Users",
-    url: "/admin/dashboard/users",
+    title: "Quotes",
+    url: "/admin/dashboard/quotes",
     icon: Users,
     isActive: true,
   },
@@ -32,7 +32,7 @@ export function AppSidebar({
 
   useEffect(() => {
     if (pathname === "/admin/dashboard") {
-      router.push("/admin/dashboard/users");
+      router.push("/admin/dashboard/quotes");
     }
   });
   return (
