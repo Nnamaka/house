@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import {  FinancingType } from "@prisma/client";
-// import { z } from "zod";
 import nodemailer from "nodemailer";
 import {prisma} from "@/lib/db"
 
@@ -18,27 +17,15 @@ type QuoteEmailData = {
     estimatedBudget?: string;
   };
   
-// Zod schema for validation
-// const quoteSchema = z.object({
-//   userId: z.string().optional(), // User might not be logged in
-//   firstName: z.string().min(1, "First name is required"),
-//   lastName: z.string().min(1, "Last name is required"),
-//   email: z.string().email("Invalid email address"),
-//   phone: z.string().min(10, "Phone number must be at least 10 digits"),
-//   customizationRequests: z.string().min(5, "Customization request must be at least 5 characters"),
-//   houseId: z.string().min(1, "House ID is required"),
-//   preferredFinancing: z.nativeEnum(FinancingType).optional(),
-//   desiredMoveInDate: z.string().datetime().optional(),
-//   estimatedBudget: z.string().regex(/^\d+(\.\d{1,2})?$/, "Invalid budget format").optional(),
-// });
 
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "nnamaka7@gmail.com";
+
+// const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "nnamaka7@gmail.com";
+const ADMIN_EMAIL = "nnamaka7@gmail.com";
 
 export async function POST(req: Request) {
   try {
     const data = await req.json();
-    // const parsedData = quoteSchema.parse(body);
-     // Validate that required fields exist
+   
      if (
       !data.firstName ||
       !data.lastName ||
