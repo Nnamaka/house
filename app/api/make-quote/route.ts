@@ -71,7 +71,7 @@ export async function POST(req: Request) {
   }
 }
 
-// Email function
+
 async function sendQuoteEmail(quoteData: QuoteEmailData) {
   const transporter = nodemailer.createTransport({
     service: "yahoo",
