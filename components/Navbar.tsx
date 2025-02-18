@@ -11,5 +11,11 @@ export default function Navbar() {
       { name: 'Contact Us', url: '#footer', icon: Contact }
     ]
   
-    return <NavBar items={navItems}/>
+    return (
+      <div className="relative flex w-screen justify-between items-center">
+        <p className="absolute top-5 left-5">vestsphere</p>
+        <NavBar items={navItems} />
+        {/* <RainbowButton>sign up</RainbowButton> */}
+      </div>
+    );
   }

@@ -8,6 +8,10 @@ import houses from "@/data/houses";
 import NavBar from "@/components/Navbar";
 import { FloatingHouses } from "@/components/FloatingHourses";
 import HouseCard from "@/components/HouseCard";
+import React from "react";
+import { EvervaultCard, Icon } from "@/components/ui/evervault-card";
+import { HeroGeometric } from "@/components/ui/shape-landing-hero";
+import Footer from "@/components/Footer";
 
 // interface House {
 //   id: string;
@@ -41,16 +45,23 @@ export default function HomePage() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <div id="home" className="mb-4 ">
-        <NavBar />
-        <div className="-z-30">
+      <NavBar />
+      <div id="home" className="mb-4 relative ">
+        {/* <div className="-z-30">
           <FloatingHouses scroll={scrollToHouses} />
-        </div>
+        </div> */}
+        <HeroGeometric
+          badge="The Future of Home is Tiny"
+          title1="Tiny Homes"
+          title2="Limitless Living"
+        />
       </div>
 
       {/* House Gallery */}
       <div className="max-w-6xl mx-auto p-6 mt-16 z-10">
-        <h2 className="text-2xl font-bold mb-6">Available Tiny Homes</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center">
+          Available Tiny Homes
+        </h2>
 
         {
           // loading ? (
@@ -85,23 +96,35 @@ export default function HomePage() {
               <div
                 key={house.id}
                 onClick={() => router.push(`/houses/${house.id}`)}
+                className="cursor-pointer"
               >
                 <HouseCard key={house.id} {...house} />
               </div>
+              // <div
+              //   key={house.id}
+              //   className="border border-black/[0.2] dark:border-white/[0.2] flex flex-col items-start max-w-sm mx-auto p-4 relative h-[30rem]"
+              // >
+              //   <Icon className="absolute h-6 w-6 -top-3 -left-3 dark:text-white text-black" />
+              //   <Icon className="absolute h-6 w-6 -bottom-3 -left-3 dark:text-white text-black" />
+              //   <Icon className="absolute h-6 w-6 -top-3 -right-3 dark:text-white text-black" />
+              //   <Icon className="absolute h-6 w-6 -bottom-3 -right-3 dark:text-white text-black" />
+
+              //   <EvervaultCard text="" />
+
+              //   <h2 className="dark:text-white text-black mt-4 text-sm font-light">
+              //     Hover over this card to reveal an awesome effect. Running out
+              //     of copy here.
+              //   </h2>
+              //   <p className="text-sm border font-light dark:border-white/[0.2] border-black/[0.2] rounded-full mt-4 text-black dark:text-white px-2 py-0.5">
+              //     Watch me hover
+              //   </p>
+              // </div>
             ))}
           </div>
           // )
         }
       </div>
-
-      {/* footer */}
-      <footer id="footer" className="bg-gray-200 p-6 mt-8">
-        {" "}
-        {/* Added ID and margin */}
-        <div className="max-w-6xl mx-auto text-center">
-          <p>&copy; 2023 Tiny Homes. All rights reserved.</p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
