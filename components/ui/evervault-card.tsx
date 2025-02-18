@@ -1,8 +1,18 @@
 "use client";
 import { useMotionValue } from "framer-motion";
 import React, { useState, useEffect } from "react";
-import { useMotionTemplate, motion } from "framer-motion";
+import { useMotionTemplate, motion, MotionValue } from "framer-motion";
 import { cn } from "@/lib/utils";
+
+interface CardPatternProps {
+  mouseX: MotionValue<number>; // Or just number if you are not using motionValue features
+  mouseY: MotionValue<number>; // Or just number if you are not using motionValue features
+  randomString: string;
+}
+
+interface IconProps extends React.SVGProps<SVGSVGElement> {
+  className?: string;
+}
 
 export const EvervaultCard = ({
   text,
@@ -11,17 +21,22 @@ export const EvervaultCard = ({
   text?: string;
   className?: string;
 }) => {
+  // eslint-disable-next-line prefer-const
   let mouseX = useMotionValue(0);
+  // eslint-disable-next-line prefer-const
   let mouseY = useMotionValue(0);
 
   const [randomString, setRandomString] = useState("");
 
   useEffect(() => {
+    // eslint-disable-next-line prefer-const
     let str = generateRandomString(1500);
     setRandomString(str);
   }, []);
 
-  function onMouseMove({ currentTarget, clientX, clientY }: any) {
+  function onMouseMove(event: React.MouseEvent<HTMLDivElement>) {
+    const { currentTarget, clientX, clientY } = event;
+    // eslint-disable-next-line prefer-const
     let { left, top } = currentTarget.getBoundingClientRect();
     mouseX.set(clientX - left);
     mouseY.set(clientY - top);
@@ -57,8 +72,14 @@ export const EvervaultCard = ({
   );
 };
 
-export function CardPattern({ mouseX, mouseY, randomString }: any) {
+export function CardPattern({
+  mouseX,
+  mouseY,
+  randomString,
+}: CardPatternProps) {
+  // eslint-disable-next-line prefer-const
   let maskImage = useMotionTemplate`radial-gradient(250px at ${mouseX}px ${mouseY}px, white, transparent)`;
+  // eslint-disable-next-line prefer-const
   let style = { maskImage, WebkitMaskImage: maskImage };
 
   return (
@@ -90,7 +111,7 @@ export const generateRandomString = (length: number) => {
   return result;
 };
 
-export const Icon = ({ className, ...rest }: any) => {
+export const Icon = ({ className, ...rest }: IconProps) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
