@@ -6,6 +6,9 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import CreateQuoteModal from "@/components/CreateQuoteModal";
 import { houses1 } from "@/data/houses";
+import Footer from "@/components/Footer";
+import NavBar from "@/components/Navbar";
+
 
 // interface House {
 //   id: string;
@@ -24,7 +27,8 @@ export default function HouseDetailPage() {
 
   const house = houses1.find((h) => h.id === id);
 
-  if (!house) return <p className="text-center mt-10 text-xl">🏠 House not found</p>;
+  if (!house)
+    return <p className="text-center mt-10 text-xl">🏠 House not found</p>;
 
   // useEffect(() => {
   //   async function fetchHouse() {
@@ -41,31 +45,132 @@ export default function HouseDetailPage() {
   if (!house) return <p className="text-center">House not found</p>;
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-4">{house.title}</h1>
+    <div className="max-w-6xl mx-auto p-6 flex flex-col gap-14">
       
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {house.images.map((img, index) => (
-          <Image key={index} src={img} alt="House Image" width={600} height={400} className="rounded-lg" />
-        ))}
-      </div>
+        <NavBar/>
+      <main className="container mx-auto px-4 py-8">
+        {/* Hero Section */}
+        <h1 className="text-3xl font-bold mb-4">{house.title}</h1>
 
-      <p className="mt-6 text-lg">{house.description}</p>
+        <div className="relative w-full h-[60vh] mb-8 rounded-lg overflow-hidden">
+          <Image
+            src={house.images[0] || "/placeholder.svg"}
+            alt={house.images[0]}
+            fill
+            className="object-cover"
+            priority
+            sizes="100vw"
+          />
+        </div>
 
-      <div className="mt-6">
-        <h2 className="text-xl font-semibold">Features</h2>
-        <ul className="list-disc pl-5">
-          {house.features.map((feature, index) => (
-            <li key={index}>{feature}</li>
+        {/* Gallery Grid */}
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-12">
+          {house.images.slice(1).map((image, i) => (
+            <div
+              key={i}
+              className="relative aspect-square rounded-lg overflow-hidden"
+            >
+              <Image
+                src={image || "/placeholder.svg"}
+                alt={image}
+                fill
+                className="object-cover"
+                sizes="(max-width: 640px) 50vw, (max-width: 768px) 50vw, 33vw"
+              />
+            </div>
           ))}
-        </ul>
-      </div>
+        </div>
 
-      <p className="text-xl font-bold mt-4">Price: ${house.price.toLocaleString()}</p>
+        {/* Details Section */}
+        <section className="mb-12">
+          <p className="mt-6 text-lg">{house.description}</p>
 
-      <Button className="mt-6" onClick={() => setShowModal(true)}>Get Quote</Button>
+          <div className="mt-6">
+            <h2 className="text-xl font-semibold">Features</h2>
+            <ul className="list-disc pl-5">
+              {house.features.map((feature, index) => (
+                <li key={index}>{feature}</li>
+              ))}
+            </ul>
+          </div>
+        </section>
+        <Button className="mt-6 mb-5" onClick={() => setShowModal(true)}>
+          Get Quote
+        </Button>
+      </main>
 
-      {showModal && <CreateQuoteModal api={true} isOpen={showModal} houseId={house.id} onClose={() => setShowModal(false)} />}
+      {showModal && (
+        <CreateQuoteModal
+          api={true}
+          isOpen={showModal}
+          houseId={house.id}
+          onClose={() => setShowModal(false)}
+        />
+      )}
+      <Footer />
     </div>
   );
 }
+
+// const galleryImages = [
+//   {
+//     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/screencapture-bettertinyhouses-store-details-php-2025-02-19-09_24_25-nKTRB35iLmHRdLRB1o23wJdt4tLA0s.png",
+//     alt: "Modern tiny home interior with white walls and wooden accents",
+//   },
+//   {
+//     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/screencapture-bettertinyhouses-store-details-php-2025-02-19-09_24_25-nKTRB35iLmHRdLRB1o23wJdt4tLA0s.png",
+//     alt: "Exterior view of gray manufactured home",
+//   },
+//   {
+//     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/screencapture-bettertinyhouses-store-details-php-2025-02-19-09_24_25-nKTRB35iLmHRdLRB1o23wJdt4tLA0s.png",
+//     alt: "Interior entrance view",
+//   },
+//   {
+//     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/screencapture-bettertinyhouses-store-details-php-2025-02-19-09_24_25-nKTRB35iLmHRdLRB1o23wJdt4tLA0s.png",
+//     alt: "Exterior side view",
+//   },
+//   {
+//     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/screencapture-bettertinyhouses-store-details-php-2025-02-19-09_24_25-nKTRB35iLmHRdLRB1o23wJdt4tLA0s.png",
+//     alt: "Modern kitchen with dark cabinets",
+//   },
+//   {
+//     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/screencapture-bettertinyhouses-store-details-php-2025-02-19-09_24_25-nKTRB35iLmHRdLRB1o23wJdt4tLA0s.png",
+//     alt: "Living area with kitchen view",
+//   },
+//   {
+//     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/screencapture-bettertinyhouses-store-details-php-2025-02-19-09_24_25-nKTRB35iLmHRdLRB1o23wJdt4tLA0s.png",
+//     alt: "Entrance hallway",
+//   },
+//   {
+//     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/screencapture-bettertinyhouses-store-details-php-2025-02-19-09_24_25-nKTRB35iLmHRdLRB1o23wJdt4tLA0s.png",
+//     alt: "Walk-in shower",
+//   },
+//   {
+//     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/screencapture-bettertinyhouses-store-details-php-2025-02-19-09_24_25-nKTRB35iLmHRdLRB1o23wJdt4tLA0s.png",
+//     alt: "Empty room with windows",
+//   },
+//   {
+//     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/screencapture-bettertinyhouses-store-details-php-2025-02-19-09_24_25-nKTRB35iLmHRdLRB1o23wJdt4tLA0s.png",
+//     alt: "Bedroom with ceiling fan",
+//   },
+//   {
+//     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/screencapture-bettertinyhouses-store-details-php-2025-02-19-09_24_25-nKTRB35iLmHRdLRB1o23wJdt4tLA0s.png",
+//     alt: "Bathroom with shower",
+//   },
+//   {
+//     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/screencapture-bettertinyhouses-store-details-php-2025-02-19-09_24_25-nKTRB35iLmHRdLRB1o23wJdt4tLA0s.png",
+//     alt: "Master bathroom with tub",
+//   },
+//   {
+//     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/screencapture-bettertinyhouses-store-details-php-2025-02-19-09_24_25-nKTRB35iLmHRdLRB1o23wJdt4tLA0s.png",
+//     alt: "Glass shower enclosure",
+//   },
+//   {
+//     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/screencapture-bettertinyhouses-store-details-php-2025-02-19-09_24_25-nKTRB35iLmHRdLRB1o23wJdt4tLA0s.png",
+//     alt: "Bathroom vanity",
+//   },
+//   {
+//     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/screencapture-bettertinyhouses-store-details-php-2025-02-19-09_24_25-nKTRB35iLmHRdLRB1o23wJdt4tLA0s.png",
+//     alt: "Empty bedroom",
+//   },
+// ]

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
+// import { RiTiktokLine } from "react-icons/ri";
 // import { Textarea } from "@/components/ui/textarea"
 import {
   Tooltip,
@@ -12,7 +13,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { Facebook, Instagram, Linkedin, Moon, Send, Sun, Twitter } from "lucide-react"
+import { Facebook, Moon, Send, Sun } from "lucide-react"
 
 function Footerdemo() {
   const [isDarkMode, setIsDarkMode] = React.useState(true)
@@ -55,13 +56,13 @@ function Footerdemo() {
           <div>
             <h3 className="mb-4 text-lg font-semibold">Quick Links</h3>
             <nav className="space-y-2 text-sm">
-              <a href="#" className="block transition-colors hover:text-primary">
+              <a href="#home" className="block transition-colors hover:text-primary">
                 Home
               </a>
               <a href="#" className="block transition-colors hover:text-primary">
                 About Us
               </a>
-              <a href="#" className="block transition-colors hover:text-primary">
+              {/* <a href="#" className="block transition-colors hover:text-primary">
                 Services
               </a>
               <a href="#" className="block transition-colors hover:text-primary">
@@ -69,7 +70,7 @@ function Footerdemo() {
               </a>
               <a href="#" className="block transition-colors hover:text-primary">
                 Contact
-              </a>
+              </a> */}
             </nav>
           </div>
           <div>
@@ -101,16 +102,17 @@ function Footerdemo() {
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button variant="outline" size="icon" className="rounded-full">
-                      <Twitter className="h-4 w-4" />
-                      <span className="sr-only">Twitter</span>
+                      {/* <Twitter className="h-4 w-4" /> */}
+                      {/* <RiTiktokLine className="h-4 w-4"/> */}
+                      <span className="sr-only">Tiktok</span>
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
-                    <p>Follow us on Twitter</p>
+                    <p>Follow us on Tiktok</p>
                   </TooltipContent>
                 </Tooltip>
               </TooltipProvider>
-              <TooltipProvider>
+              {/* <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button variant="outline" size="icon" className="rounded-full">
@@ -122,8 +124,8 @@ function Footerdemo() {
                     <p>Follow us on Instagram</p>
                   </TooltipContent>
                 </Tooltip>
-              </TooltipProvider>
-              <TooltipProvider>
+              </TooltipProvider> */}
+              {/* <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button variant="outline" size="icon" className="rounded-full">
@@ -135,7 +137,7 @@ function Footerdemo() {
                     <p>Connect with us on LinkedIn</p>
                   </TooltipContent>
                 </Tooltip>
-              </TooltipProvider>
+              </TooltipProvider> */}
             </div>
             <div className="flex items-center space-x-2">
               <Sun className="h-4 w-4" />
