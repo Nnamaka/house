@@ -28,7 +28,7 @@ export function Testimonials({
   testimonials,
   className,
   title = "What Our Customers Are Saying",
-  description = "Join thousands of satisfied investors who trust Vestsphere to grow their crypto portfolios. Here's what they have to say.",
+  description = "Join countless happy homeowners who have embraced a simpler, more sustainable way of living with Tiny Homes Limitless Living. Here’s what they have to say!",
   maxDisplayed = 6,
 }: TestimonialsProps) {
   const [showAll, setShowAll] = useState(false);
