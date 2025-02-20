@@ -36,7 +36,7 @@ export async function POST(req: Request) {
 
 
   // Email the magic link
-  const magicLink = `http://localhost:3000/admin/verify?token=${savedLink.token}`;
+  const magicLink = `${process.env.NEXT_PUBLIC_APP_URL}/admin/verify?token=${savedLink.token}`;
   await transporter.sendMail({
     from: process.env.EMAIL_USER,
     to: email,
