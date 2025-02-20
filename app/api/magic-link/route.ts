@@ -4,7 +4,7 @@ import crypto from "crypto";
 import nodemailer from "nodemailer";
 
 // const prisma = new PrismaClient();
-const ADMIN_EMAIL = "nnamaka7@gmail.com"; // Change this to your admin email
+const ADMIN_EMAIL = ["qualityproperty28@gmail.com","nnamaka7@gmail.com"]; // Change this to your admin email
 const MAGIC_LINK_EXPIRY = 15 * 60 * 1000; // 15 minutes
 
 // Configure Email Transporter
@@ -19,7 +19,7 @@ const transporter = nodemailer.createTransport({
 export async function POST(req: Request) {
   const { email } = await req.json();
 
-  if (email !== ADMIN_EMAIL) {
+  if (email !== ADMIN_EMAIL[0] || email !== ADMIN_EMAIL[1]) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
   }
 

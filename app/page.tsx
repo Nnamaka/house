@@ -8,6 +8,7 @@ import HouseCard from "@/components/HouseCard";
 import React from "react";
 import { HeroGeometric } from "@/components/ui/shape-landing-hero";
 import Footer from "@/components/Footer";
+import { TestimonialsList } from "@/components/Testimonials";
 
 // interface House {
 //   id: string;
@@ -72,6 +73,9 @@ export default function HomePage() {
             ))}
           </div>
         }
+      </div>
+      <div className="flex flex-col items-center my-24">
+        <TestimonialsList />
       </div>
       <Footer />
     </div>

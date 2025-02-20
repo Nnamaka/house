@@ -25,6 +25,10 @@ interface House {
   description: string;
   images: string[];
   features: string[];
+  bedrooms: number;
+  bathrooms: number;
+  sleeps: number;
+  dimension: string;
 }
 
 export default function HousesPage() {
@@ -36,6 +40,10 @@ export default function HousesPage() {
     description: "",
     images: [] as string[],
     features: "",
+    bedrooms: 0,
+    bathrooms: 0,
+    sleeps: 0,
+    dimension: "",
   });
 
   const [isUploading, setIsUploading] = useState(false);
@@ -47,7 +55,9 @@ export default function HousesPage() {
 
   useEffect(() => {
     const fetchHouses = async () => {
-      const res = await fetch("/api/houses");
+      const res = await fetch("/api/houses", {
+        method: "GET", // Explicitly specify GET (not needed)
+      });
       const data = await res.json();
       setHouses(data);
     };
@@ -77,6 +87,10 @@ export default function HousesPage() {
         description: "",
         images: [],
         features: "",
+        bedrooms: 0,
+        bathrooms: 0,
+        sleeps: 0,
+        dimension: "",
       });
     };
     if (!isOpen) {
@@ -132,11 +146,12 @@ export default function HousesPage() {
   };
 
   const handleCreateHouse = async () => {
-    if (!newHouse.title || !newHouse.price || !newHouse.description) return;
+    if (!newHouse.title || !newHouse.price ) return;
     setIsCreating(true);
 
     // for the api
     try {
+      console.log("Posting house...")
       const res = await fetch("/api/houses", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -159,6 +174,10 @@ export default function HousesPage() {
           description: "",
           images: [],
           features: "",
+          bedrooms: 0,
+          bathrooms: 0,
+          sleeps: 0,
+          dimension: "",
         });
       }
     } catch (error) {
@@ -326,7 +345,7 @@ export default function HousesPage() {
             </div>
 
             <div>
-              <Label>Description</Label>
+              <Label>Description </Label>
               <Textarea
                 name="description"
                 value={newHouse.description}
@@ -344,6 +363,49 @@ export default function HousesPage() {
                 onChange={handleChange}
                 placeholder="e.g., Solar Panels, 2 Beds, Smart Home"
               />
+            </div>
+            <div>
+              <Label>
+                Bedrooms
+                <Input
+                  name="bedrooms"
+                  type="number"
+                  value={newHouse.bedrooms}
+                  onChange={handleChange}
+                />
+              </Label>
+            </div>
+            <div>
+              <Label>
+                Bathrooms
+                <Input
+                  name="bathrooms"
+                  type="number"
+                  value={newHouse.bathrooms}
+                  onChange={handleChange}
+                />
+              </Label>
+            </div>
+            <div>
+              <Label>
+                Sleeps
+                <Input
+                  name="sleeps"
+                  type="number"
+                  value={newHouse.sleeps}
+                  onChange={handleChange}
+                />
+              </Label>
+            </div>
+            <div>
+              <Label>
+                Dimension
+                <Textarea
+                  name="dimension"
+                  value={newHouse.dimension}
+                  onChange={handleChange}
+                />
+              </Label>
             </div>
 
             <div>
@@ -411,7 +473,7 @@ export default function HousesPage() {
                   width={160} // Example: Set the actual width of your image
                   height={160}
                   alt={house.title}
-                  loading = 'lazy'
+                  loading="lazy"
                   className="w-16 h-16 object-cover rounded-lg"
                 />
               ))}
@@ -487,6 +549,69 @@ export default function HousesPage() {
                     })
                   }
                 />
+              </div>
+              <div>
+                <Label>
+                  Bedrooms
+                  <Input
+                    name="bedrooms"
+                    type="number"
+                    value={selectedHouse.bedrooms}
+                    onChange={(e) =>
+                      setSelectedHouse({
+                        ...selectedHouse,
+                        bathrooms: parseFloat(e.target.value) || 0,
+                      })
+                    }
+                  />
+                </Label>
+              </div>
+              <div>
+                <Label>
+                  Bathrooms
+                  <Input
+                    name="bathrooms"
+                    type="number"
+                    value={selectedHouse.bathrooms}
+                    onChange={(e) =>
+                      setSelectedHouse({
+                        ...selectedHouse,
+                        bathrooms: parseFloat(e.target.value) || 0,
+                      })
+                    }
+                  />
+                </Label>
+              </div>
+              <div>
+                <Label>
+                  Dimension
+                  <Input
+                    name="squareFeet"
+                    type="number"
+                    value={selectedHouse.dimension}
+                    onChange={(e) =>
+                      setSelectedHouse({
+                        ...selectedHouse,
+                        dimension: e.target.value,
+                      })
+                    }
+                  />
+                </Label>
+              </div>
+              <div>
+                <Label>
+                  Sleeps
+                  <Textarea
+                    name="amenities"
+                    value={selectedHouse.sleeps}
+                    onChange={(e) =>
+                      setSelectedHouse({
+                        ...selectedHouse,
+                        sleeps: parseFloat(e.target.value) || 0,
+                      })
+                    }
+                  />
+                </Label>
               </div>
               <div>
                 <Label>Images</Label>

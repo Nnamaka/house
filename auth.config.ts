@@ -5,7 +5,7 @@ import type { NextAuthConfig } from "next-auth";
 import { LoginSchema } from "@/schemas";
 import { prisma } from "./lib/db";
 import { z } from "zod";
-import bcrypt from "bcryptjs";
+// import bcrypt from "bcryptjs";
 
 export default {
   providers: [
@@ -15,7 +15,7 @@ export default {
         const validatedFields = LoginSchema.safeParse(credentials);
 
         if (validatedFields.success) {
-          const { email, password } = validatedFields.data;
+          const { email } = validatedFields.data;
 
           const user = await getUserByEmail(email);
 
@@ -25,9 +25,9 @@ export default {
 
           if (!user || !user.password) return null;
 
-          const passwordMatch = await bcrypt.compare(password, user.password);
+          // const passwordMatch = await bcrypt.compare(password, user.password);
 
-          if (!passwordMatch) throw new Error("Invalid Credentials");
+          // if (!passwordMatch) throw new Error("Invalid Credentials");
 
           return { id: user.id, email: user.email };
           //   const user = await getUserByEmail(email);

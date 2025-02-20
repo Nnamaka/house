@@ -16,10 +16,30 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { title, price, description, images, features } = body;
+    const {
+      title,
+      price,
+      description,
+      images,
+      features,
+      bedrooms,
+      bathrooms,
+      sleeps,
+      dimension,
+    } = body;
 
     const newHouse = await prisma.house.create({
-      data: { title, price, description, images, features },
+      data: {
+        title,
+        price,
+        description,
+        images,
+        features,
+        bedrooms,
+        bathrooms,
+        sleeps,
+        dimension,
+      },
     });
 
     return NextResponse.json(newHouse, { status: 201 });

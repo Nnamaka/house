@@ -20,7 +20,8 @@ type QuoteEmailData = {
 
 
 // const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "nnamaka7@gmail.com";
-const ADMIN_EMAIL = "nnamaka7@gmail.com";
+const ADMIN_EMAIL = ["qualityproperty28@gmail.com","nnamaka7@gmail.com"]; // Change this to your admin email
+
 
 export async function POST(req: Request) {
   try {
@@ -83,7 +84,7 @@ async function sendQuoteEmail(quoteData: QuoteEmailData) {
 
   const mailOptions = {
     from: process.env.EMAIL_USER,
-    to: ADMIN_EMAIL,
+    to: ADMIN_EMAIL[0],
     subject: "New Quote Request",
     text: `New Quote Request:
     

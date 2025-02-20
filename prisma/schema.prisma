@@ -151,10 +151,14 @@ enum FinancingType {
 model House {
   id          String   @id @default(uuid())
   title       String
-  description String
+  description String?
   price       Float
   images      String[]
   features    String[]
+  bedrooms    Int
+  bathrooms   Int
+  sleeps      Int
+  dimension   String
 }
 
 model MagicLink {
