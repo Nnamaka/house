@@ -2,23 +2,29 @@
 
 // import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import houses from "@/data/houses";
+// import houses from "@/data/houses";
 import NavBar from "@/components/Navbar";
 import HouseCard from "@/components/HouseCard";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { HeroGeometric } from "@/components/ui/shape-landing-hero";
 import Footer from "@/components/Footer";
 import { TestimonialsList } from "@/components/Testimonials";
 
-// interface House {
-//   id: string;
-//   title: string;
-//   price: number;
-//   images: string[];
-// }
+interface House {
+  id: string;
+  title: string;
+  description: string;
+  price: number;
+  images: string[];
+  features: string[];
+  bedrooms: number;
+  bathrooms: number;
+  sleeps: number;
+  dimension: string;
+}
 
 export default function HomePage() {
-  // const [houses, setHouses] = useState<House[]>([]);
+  const [houses, setHouses] = useState<House[]>([]);
   // const [loading, setLoading] = useState(true);
   const router = useRouter();
 
@@ -29,15 +35,15 @@ export default function HomePage() {
   //   }
   // };
 
-  // useEffect(() => {
-  //   async function fetchHouses() {
-  //     const res = await fetch("/api/houses");
-  //     const data = await res.json();
-  //     setHouses(data);
-  //     setLoading(false);
-  //   }
-  //   fetchHouses();
-  // }, []);
+  useEffect(() => {
+    async function fetchHouses() {
+      const res = await fetch("/api/houses");
+      const data = await res.json();
+      setHouses(data);
+      // setLoading(false);
+    }
+    fetchHouses();
+  }, []);
 
   return (
     <div className="flex flex-col">

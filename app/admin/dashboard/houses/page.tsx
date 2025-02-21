@@ -21,8 +21,8 @@ import { Loader, Trash2 } from "lucide-react";
 interface House {
   id: string;
   title: string;
-  price: number;
   description: string;
+  price: number;
   images: string[];
   features: string[];
   bedrooms: number;
@@ -101,12 +101,16 @@ export default function HousesPage() {
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setNewHouse({ ...newHouse, [e.target.name]: e.target.value });
+    const value =
+      e.target.type === "number"
+        ? parseFloat(e.target.value) || 0
+        : e.target.value;
+    setNewHouse({ ...newHouse, [e.target.name]: value });
   };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setIsOpen(true);
+      // setIsOpen(true);
       setIsUploading(true);
       const files = Array.from(e.target.files);
       const uploadedUrls: string[] = [];
@@ -132,6 +136,14 @@ export default function HousesPage() {
 
         // track these as temporary upload
         setTempUploadedImages((prev) => [...prev, ...uploadedUrls]);
+        const target = selectedHouse ? selectedHouse : newHouse;
+        const updatedImages = [...target.images, ...uploadedUrls];
+
+        if (selectedHouse) {
+          setSelectedHouse({ ...selectedHouse, images: updatedImages });
+        } else {
+          setNewHouse({ ...newHouse, images: updatedImages });
+        }
 
         setNewHouse({
           ...newHouse,
@@ -146,12 +158,12 @@ export default function HousesPage() {
   };
 
   const handleCreateHouse = async () => {
-    if (!newHouse.title || !newHouse.price ) return;
+    if (!newHouse.title || !newHouse.price) return;
     setIsCreating(true);
 
     // for the api
     try {
-      console.log("Posting house...")
+      console.log("Posting house...");
       const res = await fetch("/api/houses", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -179,12 +191,13 @@ export default function HousesPage() {
           sleeps: 0,
           dimension: "",
         });
+        setIsOpen(false);
       }
     } catch (error) {
       console.log("Error creating house: ", error);
     } finally {
       setIsCreating(false);
-      setIsOpen(false);
+      // setIsOpen(false);
     }
   };
 
@@ -334,6 +347,16 @@ export default function HousesPage() {
             </div>
 
             <div>
+              <Label>Description</Label>
+              <Textarea
+                name="description"
+                value={newHouse.description}
+                onChange={handleChange}
+                placeholder="Describe the house"
+              />
+            </div>
+
+            <div>
               <Label>Price ($)</Label>
               <Input
                 type="number"
@@ -341,16 +364,6 @@ export default function HousesPage() {
                 value={newHouse.price}
                 onChange={handleChange}
                 placeholder="House price"
-              />
-            </div>
-
-            <div>
-              <Label>Description </Label>
-              <Textarea
-                name="description"
-                value={newHouse.description}
-                onChange={handleChange}
-                placeholder="Describe the house"
               />
             </div>
 
@@ -365,47 +378,39 @@ export default function HousesPage() {
               />
             </div>
             <div>
-              <Label>
-                Bedrooms
-                <Input
-                  name="bedrooms"
-                  type="number"
-                  value={newHouse.bedrooms}
-                  onChange={handleChange}
-                />
-              </Label>
+              <Label>Bedrooms</Label>
+              <Input
+                name="bedrooms"
+                type="number"
+                value={newHouse.bedrooms}
+                onChange={handleChange}
+              />
             </div>
             <div>
-              <Label>
-                Bathrooms
-                <Input
-                  name="bathrooms"
-                  type="number"
-                  value={newHouse.bathrooms}
-                  onChange={handleChange}
-                />
-              </Label>
+              <Label>Bathrooms</Label>
+              <Input
+                name="bathrooms"
+                type="number"
+                value={newHouse.bathrooms}
+                onChange={handleChange}
+              />
             </div>
             <div>
-              <Label>
-                Sleeps
-                <Input
-                  name="sleeps"
-                  type="number"
-                  value={newHouse.sleeps}
-                  onChange={handleChange}
-                />
-              </Label>
+              <Label>Sleeps</Label>
+              <Input
+                name="sleeps"
+                type="number"
+                value={newHouse.sleeps}
+                onChange={handleChange}
+              />
             </div>
             <div>
-              <Label>
-                Dimension
-                <Textarea
-                  name="dimension"
-                  value={newHouse.dimension}
-                  onChange={handleChange}
-                />
-              </Label>
+              <Label>Dimension</Label>
+              <Textarea
+                name="dimension"
+                value={newHouse.dimension}
+                onChange={handleChange}
+              />
             </div>
 
             <div>
@@ -433,7 +438,7 @@ export default function HousesPage() {
                         width={160} // Example: Set the actual width of your image
                         height={160}
                         alt="House Preview"
-                        className="w-16 h-16 object-cover rounded-lg"
+                        className="w-full h-16 object-cover rounded-lg"
                         unoptimized={true}
                       />
                     ))
@@ -523,6 +528,7 @@ export default function HousesPage() {
               <div>
                 <Label>Description</Label>
                 <Textarea
+                  name="description"
                   value={selectedHouse?.description || ""}
                   onChange={(e) =>
                     setSelectedHouse({

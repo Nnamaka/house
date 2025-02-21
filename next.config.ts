@@ -7,11 +7,10 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'lnpcuuffgsnkldejvkzq.supabase.co',
+        port: '',
         pathname: '/storage/v1/object/public/**',
       },
     ],
-    // minimumCacheTTL: 60,
-    domains: ["lnpcuuffgsnkldejvkzq.supabase.co"],
   },
 };
 

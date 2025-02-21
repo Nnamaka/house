@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import CreateQuoteModal from "@/components/CreateQuoteModal";
-import { houses1 } from "@/data/houses";
+// import { houses1 } from "@/data/houses";
 import Footer from "@/components/Footer";
 import NavBar from "@/components/Navbar";
 
@@ -19,27 +19,40 @@ import NavBar from "@/components/Navbar";
 //   features: string[];
 // }
 
+interface House {
+  id: string;
+  title: string;
+  description: string;
+  price: number;
+  images: string[];
+  features: string[];
+  bedrooms: number;
+  bathrooms: number;
+  sleeps: number;
+  dimension: string;
+}
+
 export default function HouseDetailPage() {
   const { id } = useParams();
-  // const [house, setHouse] = useState<House | null>(null);
+  const [house, setHouse] = useState<House | null>(null);
   // const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
 
-  const house = houses1.find((h) => h.id === id);
+  // const house = houses1.find((h) => h.id === id);
 
-  if (!house)
-    return <p className="text-center mt-10 text-xl">🏠 House not found</p>;
+  // if (!house)
+  //   return <p className="text-center mt-10 text-xl">🏠 House not found</p>;
 
-  // useEffect(() => {
-  //   async function fetchHouse() {
-  //     const res = await fetch(`/api/houses/${id}`);
-  //     const data = await res.json();
-  //     setHouse(data);
-  //     setLoading(false);
-  //   }
+  useEffect(() => {
+    async function fetchHouse() {
+      const res = await fetch(`/api/houses/${id}`);
+      const data = await res.json();
+      setHouse(data);
+      // setLoading(false);
+    }
 
-  //   if (id) fetchHouse();
-  // }, [id]);
+    if (id) fetchHouse();
+  }, [id]);
 
   // if (loading) return <p className="text-center">Loading...</p>;
   if (!house) return <p className="text-center">House not found</p>;

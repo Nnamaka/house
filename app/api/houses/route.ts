@@ -41,9 +41,11 @@ export async function POST(request: NextRequest) {
         dimension,
       },
     });
+    console.log("Created house")
 
     return NextResponse.json(newHouse, { status: 201 });
   } catch {
+    console.log("could not create house")
     return NextResponse.json(
       { message: "Error creating house" },
       { status: 500 }
