@@ -9,6 +9,7 @@ import React, { useEffect, useState } from "react";
 import { HeroGeometric } from "@/components/ui/shape-landing-hero";
 import Footer from "@/components/Footer";
 import { TestimonialsList } from "@/components/Testimonials";
+import Services from "@/components/Services";
 
 interface House {
   id: string;
@@ -52,18 +53,19 @@ export default function HomePage() {
       <div id="home" className="mb-4 relative ">
         {/* <div className="-z-30">
           <FloatingHouses scroll={scrollToHouses} />
-        </div> */}
+          </div> */}
         <HeroGeometric
           badge="The Future of Home is Tiny"
           title1="Tiny Homes"
           title2="Limitless Living"
         />
       </div>
+      <Services />
 
       {/* House Gallery */}
       <div className="max-w-6xl mx-auto p-6 mt-16 z-10">
         <h2 className="text-2xl font-bold mb-6 text-center">
-          Available Tiny Homes
+          Available Homes
         </h2>
 
         {

@@ -91,7 +91,7 @@ const testimonials = [
 
 export function TestimonialsList() {
   return (
-    <div id="reviews" className="container py-10">
+    <div id="reviews" className="container py-10 px-5">
       <Testimonials testimonials={testimonials}  />
     </div>
   );

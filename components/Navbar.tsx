@@ -13,7 +13,7 @@ export default function Navbar() {
   
     return (
       <div className="relative flex w-screen justify-between items-center">
-        <p className="absolute top-5 left-5">vestsphere</p>
+        <p className="absolute top-5 left-5">Qualityproperty</p>
         <NavBar items={navItems} />
         {/* <RainbowButton>sign up</RainbowButton> */}
       </div>
