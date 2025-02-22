@@ -41,7 +41,9 @@ export default function HouseDetailPage() {
 
   // if (!house)
   //   return <p className="text-center mt-10 text-xl">🏠 House not found</p>;
-
+  function formatString(inputString: string) {
+    return inputString.replace(/(\d+)([A-Za-z])(\d+)/, '$1 $2 $3');
+  }
   useEffect(() => {
     async function fetchHouse() {
       const res = await fetch(`/api/houses/${id}`);
@@ -96,17 +98,17 @@ export default function HouseDetailPage() {
           <h2 className="text-xl font-semibold">SPECIFICATIONS</h2>
           <div className="mt-4 border rounded-lg p-4">
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3">
-              <div className="flex justify-between border-b pb-2">
+              {/* <div className="flex justify-between border-b pb-2">
                 <span className="text-blue-600 font-medium">
                   BASE PRICE (USD)
                 </span>
                 <span className="font-semibold">
                   ${house.price.toLocaleString()}
                 </span>
-              </div>
+              </div> */}
               <div className="flex justify-between border-b pb-2">
                 <span className="text-blue-600 font-medium">Square Feet</span>
-                <span className="font-semibold">{house.dimension}</span>
+                <span className="font-semibold">{formatString(house.dimension)}</span>
               </div>
               <div className="flex justify-between border-b pb-2">
                 <span className="text-blue-600 font-medium">Sleeps</span>

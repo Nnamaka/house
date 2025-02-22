@@ -7,6 +7,8 @@ import nodemailer from "nodemailer";
 const ADMIN_EMAIL = ["qualityproperty28@gmail.com","nnamaka7@gmail.com"]; // Change this to your admin email
 const MAGIC_LINK_EXPIRY = 15 * 60 * 1000; // 15 minutes
 
+const isAdminEmail = (email: string): boolean => ADMIN_EMAIL.includes(email);
+
 // Configure Email Transporter
 const transporter = nodemailer.createTransport({
   service: "yahoo",
@@ -19,7 +21,8 @@ const transporter = nodemailer.createTransport({
 export async function POST(req: Request) {
   const { email } = await req.json();
 
-  if (email !== ADMIN_EMAIL[0] || email !== ADMIN_EMAIL[1]) {
+  if (!isAdminEmail(email)) {
+
     return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
   }
 
