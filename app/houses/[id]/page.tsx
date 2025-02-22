@@ -9,7 +9,6 @@ import CreateQuoteModal from "@/components/CreateQuoteModal";
 import Footer from "@/components/Footer";
 import NavBar from "@/components/Navbar";
 
-
 // interface House {
 //   id: string;
 //   title: string;
@@ -55,12 +54,11 @@ export default function HouseDetailPage() {
   }, [id]);
 
   // if (loading) return <p className="text-center">Loading...</p>;
-  if (!house) return <p className="text-center">House not found</p>;
+  if (!house) return <p className="text-center">House loading</p>;
 
   return (
     <div className="max-w-6xl mx-auto p-6 flex flex-col gap-14">
-      
-        <NavBar/>
+      <NavBar />
       <main className="container mx-auto px-4 py-8">
         {/* Hero Section */}
         <h1 className="text-3xl font-bold mb-4">{house.title}</h1>
@@ -94,20 +92,52 @@ export default function HouseDetailPage() {
           ))}
         </div>
 
+        <section className="mb-12">
+          <h2 className="text-xl font-semibold">SPECIFICATIONS</h2>
+          <div className="mt-4 border rounded-lg p-4">
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 md:grid-cols-3">
+              <div className="flex justify-between border-b pb-2">
+                <span className="text-blue-600 font-medium">
+                  BASE PRICE (USD)
+                </span>
+                <span className="font-semibold">
+                  ${house.price.toLocaleString()}
+                </span>
+              </div>
+              <div className="flex justify-between border-b pb-2">
+                <span className="text-blue-600 font-medium">Square Feet</span>
+                <span className="font-semibold">{house.dimension}</span>
+              </div>
+              <div className="flex justify-between border-b pb-2">
+                <span className="text-blue-600 font-medium">Sleeps</span>
+                <span className="font-semibold">{house.sleeps}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-blue-600 font-medium">Bedrooms</span>
+                <span className="font-semibold">{house.bedrooms}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-blue-600 font-medium">Bathrooms</span>
+                <span className="font-semibold">{house.bathrooms}</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* Details Section */}
         <section className="mb-12">
-          <p className="mt-6 text-lg">{house.description}</p>
+          {/* <p className="mt-6 text-lg">{house.description}</p> */}
 
           <div className="mt-6">
-            <h2 className="text-xl font-semibold">Features</h2>
-            <ul className="list-disc pl-5">
+            <h2 className="text-xl font-semibold mb-4">FEATURES</h2>
+            <ul className=" ">
               {house.features.map((feature, index) => (
                 <li key={index}>{feature}</li>
               ))}
             </ul>
           </div>
         </section>
-        <Button className="mt-6 mb-5" onClick={() => setShowModal(true)}>
+        <Button className=" mb-5" onClick={() => setShowModal(true)}>
           Get Quote
         </Button>
       </main>
@@ -124,66 +154,3 @@ export default function HouseDetailPage() {
     </div>
   );
 }
-
-// const galleryImages = [
-//   {
-//     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/screencapture-bettertinyhouses-store-details-php-2025-02-19-09_24_25-nKTRB35iLmHRdLRB1o23wJdt4tLA0s.png",
-//     alt: "Modern tiny home interior with white walls and wooden accents",
-//   },
-//   {
-//     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/screencapture-bettertinyhouses-store-details-php-2025-02-19-09_24_25-nKTRB35iLmHRdLRB1o23wJdt4tLA0s.png",
-//     alt: "Exterior view of gray manufactured home",
-//   },
-//   {
-//     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/screencapture-bettertinyhouses-store-details-php-2025-02-19-09_24_25-nKTRB35iLmHRdLRB1o23wJdt4tLA0s.png",
-//     alt: "Interior entrance view",
-//   },
-//   {
-//     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/screencapture-bettertinyhouses-store-details-php-2025-02-19-09_24_25-nKTRB35iLmHRdLRB1o23wJdt4tLA0s.png",
-//     alt: "Exterior side view",
-//   },
-//   {
-//     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/screencapture-bettertinyhouses-store-details-php-2025-02-19-09_24_25-nKTRB35iLmHRdLRB1o23wJdt4tLA0s.png",
-//     alt: "Modern kitchen with dark cabinets",
-//   },
-//   {
-//     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/screencapture-bettertinyhouses-store-details-php-2025-02-19-09_24_25-nKTRB35iLmHRdLRB1o23wJdt4tLA0s.png",
-//     alt: "Living area with kitchen view",
-//   },
-//   {
-//     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/screencapture-bettertinyhouses-store-details-php-2025-02-19-09_24_25-nKTRB35iLmHRdLRB1o23wJdt4tLA0s.png",
-//     alt: "Entrance hallway",
-//   },
-//   {
-//     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/screencapture-bettertinyhouses-store-details-php-2025-02-19-09_24_25-nKTRB35iLmHRdLRB1o23wJdt4tLA0s.png",
-//     alt: "Walk-in shower",
-//   },
-//   {
-//     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/screencapture-bettertinyhouses-store-details-php-2025-02-19-09_24_25-nKTRB35iLmHRdLRB1o23wJdt4tLA0s.png",
-//     alt: "Empty room with windows",
-//   },
-//   {
-//     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/screencapture-bettertinyhouses-store-details-php-2025-02-19-09_24_25-nKTRB35iLmHRdLRB1o23wJdt4tLA0s.png",
-//     alt: "Bedroom with ceiling fan",
-//   },
-//   {
-//     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/screencapture-bettertinyhouses-store-details-php-2025-02-19-09_24_25-nKTRB35iLmHRdLRB1o23wJdt4tLA0s.png",
-//     alt: "Bathroom with shower",
-//   },
-//   {
-//     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/screencapture-bettertinyhouses-store-details-php-2025-02-19-09_24_25-nKTRB35iLmHRdLRB1o23wJdt4tLA0s.png",
-//     alt: "Master bathroom with tub",
-//   },
-//   {
-//     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/screencapture-bettertinyhouses-store-details-php-2025-02-19-09_24_25-nKTRB35iLmHRdLRB1o23wJdt4tLA0s.png",
-//     alt: "Glass shower enclosure",
-//   },
-//   {
-//     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/screencapture-bettertinyhouses-store-details-php-2025-02-19-09_24_25-nKTRB35iLmHRdLRB1o23wJdt4tLA0s.png",
-//     alt: "Bathroom vanity",
-//   },
-//   {
-//     src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/screencapture-bettertinyhouses-store-details-php-2025-02-19-09_24_25-nKTRB35iLmHRdLRB1o23wJdt4tLA0s.png",
-//     alt: "Empty bedroom",
-//   },
-// ]
