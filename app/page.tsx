@@ -82,6 +82,7 @@ export default function HomePage() {
           </div>
         }
       </div>
+      
       <div className="flex flex-col items-center my-24">
         <TestimonialsList />
       </div>
