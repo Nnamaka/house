@@ -59,7 +59,7 @@ function Footerdemo() {
               <a href="#home" className="block transition-colors hover:text-primary">
                 Home
               </a>
-              <a href="#" className="block transition-colors hover:text-primary">
+              <a href="/about" className="block transition-colors hover:text-primary">
                 About Us
               </a>
               {/* <a href="#" className="block transition-colors hover:text-primary">
@@ -158,10 +158,10 @@ function Footerdemo() {
             © 2024 QualityProperty. All rights reserved.
           </p>
           <nav className="flex gap-4 text-sm">
-            <a href="#" className="transition-colors hover:text-primary">
+            <a href="/privacy" className="transition-colors hover:text-primary">
               Privacy Policy
             </a>
-            <a href="#" className="transition-colors hover:text-primary">
+            <a href="/terms" className="transition-colors hover:text-primary">
               Terms of Service
             </a>
             {/* <a href="#" className="transition-colors hover:text-primary">
