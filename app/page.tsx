@@ -55,9 +55,10 @@ export default function HomePage() {
           <FloatingHouses scroll={scrollToHouses} />
           </div> */}
         <HeroGeometric
-          badge="The Future of Home is Tiny"
-          title1="Tiny Homes"
-          title2="Limitless Living"
+          badge="Small spaces, big possibilities."
+          title1="Your Home"
+          title2="Your Way!"
+          
         />
       </div>
       <Services />

@@ -1,20 +1,7 @@
 import Image from "next/image";
 import { Card } from "@/components/ui/card";
-// import { Badge } from "@/components/ui/badge";
 import { Icon } from "@/components/ui/evervault-card";
 import { BedDouble, Bath, Users, PencilRuler } from "lucide-react";
-
-// interface HouseProps {
-//   id: string;
-//   title: string;
-//   price: number;
-//   images: string[];
-//   location: string;
-//   bedrooms: number;
-//   bathrooms: number;
-//   dimensions: string;
-//   sleeps: number;
-// }
 
 interface HouseProps {
   id: string;
@@ -41,9 +28,8 @@ export default function HouseCard({
   dimension,
   sleeps,
 }: HouseProps) {
-
   function formatString(inputString: string) {
-    return inputString.replace(/(\d+)([A-Za-z])(\d+)/, '$1 $2 $3');
+    return inputString.replace(/(\d+)([A-Za-z])(\d+)/, "$1 $2 $3");
   }
   return (
     <div className="border border-black/[0.2] dark:border-white/[0.2] flex flex-col items-start max-w-sm mx-auto p-4 relative h-[27rem]">
@@ -62,9 +48,6 @@ export default function HouseCard({
             height={250}
             className="w-full h-48 object-cover"
           />
-          {/* <Badge className="absolute top-3 left-3 bg-blue-500 text-white">
-            Featured
-          </Badge> */}
         </div>
       </Card>
 
@@ -89,7 +72,7 @@ export default function HouseCard({
           <div className="flex items-center justify-center gap-2">
             <Users className="w-4 h-4" />
             <h2 className="dark:text-white text-black text-sm font-light cursor-default">
-              sleep  {sleeps}
+              sleep {sleeps}
             </h2>
           </div>
           <div className="flex items-center justify-center gap-2">

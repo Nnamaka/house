@@ -8,15 +8,7 @@ import CreateQuoteModal from "@/components/CreateQuoteModal";
 // import { houses1 } from "@/data/houses";
 import Footer from "@/components/Footer";
 import NavBar from "@/components/Navbar";
-
-// interface House {
-//   id: string;
-//   title: string;
-//   description: string;
-//   price: number;
-//   images: string[];
-//   features: string[];
-// }
+import { BedDouble, Bath, Users, PencilRuler } from "lucide-react";
 
 interface House {
   id: string;
@@ -42,7 +34,7 @@ export default function HouseDetailPage() {
   // if (!house)
   //   return <p className="text-center mt-10 text-xl">🏠 House not found</p>;
   function formatString(inputString: string) {
-    return inputString.replace(/(\d+)([A-Za-z])(\d+)/, '$1 $2 $3');
+    return inputString.replace(/(\d+)([A-Za-z])(\d+)/, "$1 $2 $3");
   }
   useEffect(() => {
     async function fetchHouse() {
@@ -108,19 +100,33 @@ export default function HouseDetailPage() {
               </div> */}
               <div className="flex justify-between border-b pb-2">
                 <span className="text-blue-600 font-medium">Square Feet</span>
-                <span className="font-semibold">{formatString(house.dimension)}</span>
+                <div className="flex items-center gap-2">
+                  <span className="font-semibold">
+                    {formatString(house.dimension)}
+                  </span>
+                  <PencilRuler className="w-4 h-4" />
+                </div>
               </div>
               <div className="flex justify-between border-b pb-2">
                 <span className="text-blue-600 font-medium">Sleeps</span>
-                <span className="font-semibold">{house.sleeps}</span>
+                <div className="flex items-center gap-2">
+                  <span className="font-semibold">{house.sleeps}</span>
+                  <Users className="w-4 h-4" />
+                </div>
               </div>
               <div className="flex justify-between">
                 <span className="text-blue-600 font-medium">Bedrooms</span>
-                <span className="font-semibold">{house.bedrooms}</span>
+                <div className="flex items-center gap-2">
+                  <span className="font-semibold">{house.bedrooms}</span>
+                  <BedDouble className="w-4 h-4" />
+                </div>
               </div>
               <div className="flex justify-between">
                 <span className="text-blue-600 font-medium">Bathrooms</span>
-                <span className="font-semibold">{house.bathrooms}</span>
+                <div className="flex items-center gap-2">
+                  <span className="font-semibold">{house.bathrooms}</span>
+                  <Bath className="w-4 h-4" />
+                </div>
               </div>
             </div>
           </div>
