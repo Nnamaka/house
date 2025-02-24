@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
-// import { RiTiktokLine } from "react-icons/ri";
+import { RiTiktokLine } from "react-icons/ri";
 // import { Textarea } from "@/components/ui/textarea"
 import {
   Tooltip,
@@ -18,7 +18,16 @@ import { Facebook, Moon, Send, Sun } from "lucide-react"
 function Footerdemo() {
   const [isDarkMode, setIsDarkMode] = React.useState(true)
   // const [isChatOpen, setIsChatOpen] = React.useState(false)
+  const tiktokUrl = "https://www.tiktok.com/@quality._property?_t=ZM-8uC2Tx0BbrJ&_r=1";
+  const facebookUrl =  "https://www.facebook.com/share/14swKcbbAv/?mibextid=LQQJ4d";
 
+  const handleTiktokClick = () => {
+    window.open(tiktokUrl, '_blank'); // Opens the URL in a new tab
+  };
+
+  const handleFacebookClick = () => {
+    window.open( facebookUrl, '_blank');
+  }
   React.useEffect(() => {
     if (isDarkMode) {
       document.documentElement.classList.add("dark")
@@ -88,7 +97,7 @@ function Footerdemo() {
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button variant="outline" size="icon" className="rounded-full">
+                    <Button variant="outline" size="icon" className="rounded-full" onClick={handleFacebookClick}>
                       <Facebook className="h-4 w-4" />
                       <span className="sr-only">Facebook</span>
                     </Button>
@@ -101,9 +110,9 @@ function Footerdemo() {
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <Button variant="outline" size="icon" className="rounded-full">
+                    <Button variant="outline" size="icon" className="rounded-full" onClick={handleTiktokClick}>
                       {/* <Twitter className="h-4 w-4" /> */}
-                      {/* <RiTiktokLine className="h-4 w-4"/> */}
+                      <RiTiktokLine className="h-4 w-4"/>
                       <span className="sr-only">Tiktok</span>
                     </Button>
                   </TooltipTrigger>
@@ -155,7 +164,7 @@ function Footerdemo() {
         </div>
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t pt-8 text-center md:flex-row">
           <p className="text-sm text-muted-foreground">
-            © 2024 QualityProperty. All rights reserved.
+            © 2015 QualityProperty. All rights reserved.
           </p>
           <nav className="flex gap-4 text-sm">
             <a href="/privacy" className="transition-colors hover:text-primary">
