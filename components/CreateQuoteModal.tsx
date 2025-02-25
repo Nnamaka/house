@@ -57,11 +57,13 @@ const CreateQuoteModal = ({
   api,
   houseId,
   onClose,
+  price
 }: {
   isOpen: boolean;
   api?: boolean;
   houseId?: string;
   onClose: () => void;
+  price: number;
 }) => {
   const { toast } = useToast();
   const {
@@ -81,8 +83,9 @@ const CreateQuoteModal = ({
   useEffect(() => {
     if (houseId) {
       setValue("houseId", houseId); // Set houseId when modal opens
+      setValue("estimatedBudget", price);
     }
-  }, [houseId, setValue]);
+  }, [houseId, setValue, price]);
   
   const onSubmit = async (data: QuoteFormData) => {
     try {
@@ -128,8 +131,9 @@ const CreateQuoteModal = ({
   const moveInDate = watch("desiredMoveInDate");
 
   return (
+   
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="w-[480px] p-7">
         <DialogHeader>
           <DialogTitle>{api ? "Request Quote" : "Create Quote"}</DialogTitle>
         </DialogHeader>

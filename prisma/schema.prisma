@@ -155,6 +155,7 @@ model House {
   price       Float
   images      String[]
   features    String[]
+  sections    Json[]
   bedrooms    Int
   bathrooms   Int
   sleeps      Int

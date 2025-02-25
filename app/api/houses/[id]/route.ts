@@ -58,11 +58,33 @@ export async function PUT(
     const id = (await params).id;
 
     const body = await request.json();
-    const { title, price, description, images, features } = body;
+    const {
+      title,
+      price,
+      description,
+      images,
+      features,
+      sections,
+      bedrooms,
+      bathrooms,
+      sleeps,
+      dimension,
+    } = body;
 
     const updatedHouse = await prisma.house.update({
       where: { id },
-      data: { title, price, description, images, features },
+      data: {
+        title,
+        price,
+        description,
+        images,
+        features,
+        sections,
+        bedrooms,
+        bathrooms,
+        sleeps,
+        dimension,
+      },
     });
 
     return NextResponse.json(updatedHouse, { status: 200 });

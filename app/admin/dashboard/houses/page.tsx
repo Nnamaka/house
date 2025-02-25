@@ -15,8 +15,15 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/lib/supabase";
-import { Loader, Trash2 } from "lucide-react";
+import { Loader, Trash2, Plus,  X  } from "lucide-react";
 // import { features } from "process";
+
+// new
+interface HouseSection {
+  name: string;
+  features: string[];
+}
+
 
 interface House {
   id: string;
@@ -25,6 +32,7 @@ interface House {
   price: number;
   images: string[];
   features: string[];
+  sections: HouseSection[]; // new
   bedrooms: number;
   bathrooms: number;
   sleeps: number;
@@ -40,6 +48,7 @@ export default function HousesPage() {
     description: "",
     images: [] as string[],
     features: "",
+    sections: [] as HouseSection[], // new
     bedrooms: 0,
     bathrooms: 0,
     sleeps: 0,
@@ -52,6 +61,12 @@ export default function HousesPage() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [tempUploadedImages, setTempUploadedImages] = useState<string[]>([]);
+
+  // new
+  const [ newSection, setNewSection ] = useState({
+    name: "",
+    featuresInput: "",
+  })
 
   useEffect(() => {
     const fetchHouses = async () => {
@@ -87,6 +102,7 @@ export default function HousesPage() {
         description: "",
         images: [],
         features: "",
+        sections: [], // new
         bedrooms: 0,
         bathrooms: 0,
         sleeps: 0,
@@ -108,9 +124,108 @@ export default function HousesPage() {
     setNewHouse({ ...newHouse, [e.target.name]: value });
   };
 
+  // new
+  const handleSectionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewSection({ ...newSection, [e.target.name]: e.target.value});
+  }
+
+  const handleAddSection = () => {
+    if (!newSection.name.trim()) return;
+    
+    const features = newSection.featuresInput
+      .split(',')
+      .map(feature => feature.trim())
+      .filter(feature => feature !== '');
+    
+    const section: HouseSection = {
+      name: newSection.name.trim(),
+      features,
+    };
+    
+    setNewHouse({
+      ...newHouse,
+      sections: [...newHouse.sections, section],
+    });
+    
+    // Reset form
+    setNewSection({ name: "", featuresInput: "" });
+  };
+
+  // Remove a section
+  const handleRemoveSection = (index: number) => {
+    const updatedSections = [...newHouse.sections];
+    updatedSections.splice(index, 1);
+    setNewHouse({ ...newHouse, sections: updatedSections });
+  };
+
+  // Handle selected house section changes
+  const handleSelectedHouseSectionChange = (
+    sectionIndex: number,
+    field: 'name' | 'features',
+    value: string | string[]
+  ) => {
+    if (!selectedHouse) return;
+    
+    const updatedSections = [...selectedHouse.sections];
+    
+    if (field === 'name') {
+      updatedSections[sectionIndex] = {
+        ...updatedSections[sectionIndex],
+        name: value as string,
+      };
+    } else if (field === 'features') {
+      updatedSections[sectionIndex] = {
+        ...updatedSections[sectionIndex],
+        features: typeof value === 'string' 
+          ? (value as string).split(',').map(f => f.trim()).filter(f => f !== '')
+          : value as string[],
+      };
+    }
+    
+    setSelectedHouse({
+      ...selectedHouse,
+      sections: updatedSections,
+    });
+  };
+
+  // Add section to selected house
+  const handleAddSectionToSelected = () => {
+    if (!selectedHouse || !newSection.name.trim()) return;
+    
+    const features = newSection.featuresInput
+      .split(',')
+      .map(feature => feature.trim())
+      .filter(feature => feature !== '');
+    
+    const section: HouseSection = {
+      name: newSection.name.trim(),
+      features,
+    };
+    
+    setSelectedHouse({
+      ...selectedHouse,
+      sections: [...(selectedHouse.sections || []), section],
+    });
+    
+    // Reset form
+    setNewSection({ name: "", featuresInput: "" });
+  };
+
+  // Remove section from selected house
+  const handleRemoveSectionFromSelected = (index: number) => {
+    if (!selectedHouse) return;
+    
+    const updatedSections = [...selectedHouse.sections];
+    updatedSections.splice(index, 1);
+    
+    setSelectedHouse({
+      ...selectedHouse,
+      sections: updatedSections,
+    });
+  };
+
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      // setIsOpen(true);
       setIsUploading(true);
       const files = Array.from(e.target.files);
       const uploadedUrls: string[] = [];
@@ -171,6 +286,7 @@ export default function HousesPage() {
           ...newHouse,
           price: parseFloat(newHouse.price),
           features: newHouse.features.split(",").map((f) => f.trim()),
+          sections: newHouse.sections // new
         }),
       });
 
@@ -186,6 +302,7 @@ export default function HousesPage() {
           description: "",
           images: [],
           features: "",
+          sections: [], //new
           bedrooms: 0,
           bathrooms: 0,
           sleeps: 0,
@@ -202,9 +319,13 @@ export default function HousesPage() {
   };
 
   const handleClickHouse = (house: House) => {
+    // new
+    const sectionsArray = house.sections || [];
+
     setSelectedHouse({
       ...house,
       features: [...house.features], // Ensure it stays an array
+      sections: sectionsArray, // new
     });
   };
 
@@ -250,6 +371,7 @@ export default function HousesPage() {
       const updatedHouse = {
         ...selectedHouse,
         features: selectedHouse.features.map((f) => f.trim()), // Ensure array type
+        sections: selectedHouse.sections || [] // new
       };
 
       const res = await fetch(`/api/houses/${selectedHouse.id}`, {
@@ -377,6 +499,66 @@ export default function HousesPage() {
                 placeholder="e.g., Solar Panels, 2 Beds, Smart Home"
               />
             </div>
+
+            <div className="space-y-2">
+              <Label className="flex justify-between items-center">
+                <span>House Sections</span>
+              </Label>
+            {/* New */}
+            {/* Sections of the house */}
+            {newHouse.sections.length > 0 && (
+                <div className="border rounded-md p-3 mb-3 space-y-3">
+                  {newHouse.sections.map((section, idx) => (
+                    <div key={idx} className="p-2 bg-gray-50 rounded relative">
+                      <h4 className="font-medium">{section.name}</h4>
+                      <p className="text-sm text-gray-600">
+                        {section.features.join(', ')}
+                      </p>
+                      <button 
+                        onClick={() => handleRemoveSection(idx)}
+                        className="absolute top-2 right-2 text-red-500"
+                        type="button"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+              <div className="border rounded-md p-3 space-y-2">
+                <div>
+                  <Label className="text-sm">Section Name</Label>
+                  <Input
+                    type="text"
+                    name="name"
+                    value={newSection.name}
+                    onChange={handleSectionChange}
+                    placeholder="e.g., Kitchen, Bathroom, Bedroom"
+                  />
+                </div>
+                <div>
+                  <Label className="text-sm">Features (comma separated)</Label>
+                  <Input
+                    type="text"
+                    name="featuresInput"
+                    value={newSection.featuresInput}
+                    onChange={handleSectionChange}
+                    placeholder="e.g., Gas Cooker, Heater, Cabinets"
+                  />
+                </div>
+                <Button 
+                  type="button" 
+                  onClick={handleAddSection}
+                  className="w-full"
+                  variant="outline"
+                  size="sm"
+                >
+                  <Plus className="h-4 w-4 mr-1" />
+                  Add Section
+                </Button>
+              </div>
+            </div>
+            
             <div>
               <Label>Bedrooms</Label>
               <Input
@@ -470,6 +652,18 @@ export default function HousesPage() {
             <h3 className="text-lg font-semibold">{house.title}</h3>
             <p>Price: ${house.price.toLocaleString()}</p>
             <p className="text-sm text-gray-600">{house.description}</p>
+            {house.sections && house.sections.length > 0 && (
+              <div className="mt-2">
+                <p className="text-sm font-medium">Sections:</p>
+                <div className="flex flex-wrap gap-1 mt-1">
+                  {house.sections.map((section, idx) => (
+                    <span key={idx} className="text-xs bg-gray-100 px-2 py-1 rounded">
+                      {section.name}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
             <div className="flex gap-2 mt-2">
               {house.images?.slice(0, 3).map((img, index) => (
                 <Image
@@ -556,6 +750,79 @@ export default function HousesPage() {
                   }
                 />
               </div>
+
+              {/* New Edit Sections */}
+              <div className="space-y-2">
+                <Label className="flex justify-between items-center">
+                  <span>House Sections</span>
+                </Label>
+                
+                {/* List of existing sections */}
+                {selectedHouse.sections && selectedHouse.sections.length > 0 && (
+                  <div className="border rounded-md p-3 mb-3 space-y-3">
+                    {selectedHouse.sections.map((section, idx) => (
+                      <div key={idx} className="p-2 bg-gray-50 rounded relative">
+                        <Input
+                          className="mb-1"
+                          value={section.name}
+                          onChange={(e) => 
+                            handleSelectedHouseSectionChange(idx, 'name', e.target.value)
+                          }
+                        />
+                        <Input
+                          value={section.features.join(', ')}
+                          onChange={(e) => 
+                            handleSelectedHouseSectionChange(idx, 'features', e.target.value)
+                          }
+                          placeholder="Features (comma separated)"
+                        />
+                        <button 
+                          onClick={() => handleRemoveSectionFromSelected(idx)}
+                          className="absolute top-2 right-2 text-red-500"
+                          type="button"
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                
+                {/* Form to add a new section */}
+                <div className="border rounded-md p-3 space-y-2">
+                  <div>
+                    <Label className="text-sm">Section Name</Label>
+                    <Input
+                      type="text"
+                      name="name"
+                      value={newSection.name}
+                      onChange={handleSectionChange}
+                      placeholder="e.g., Kitchen, Bathroom, Bedroom"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-sm">Features (comma separated)</Label>
+                    <Input
+                      type="text"
+                      name="featuresInput"
+                      value={newSection.featuresInput}
+                      onChange={handleSectionChange}
+                      placeholder="e.g., Gas Cooker, Heater, Cabinets"
+                    />
+                  </div>
+                  <Button 
+                    type="button" 
+                    onClick={handleAddSectionToSelected}
+                    className="w-full"
+                    variant="outline"
+                    size="sm"
+                  >
+                    <Plus className="h-4 w-4 mr-1" />
+                    Add Section
+                  </Button>
+                </div>
+              </div>
+              
               <div>
                 <Label>
                   Bedrooms
@@ -592,8 +859,8 @@ export default function HousesPage() {
                 <Label>
                   Dimension
                   <Input
-                    name="squareFeet"
-                    type="number"
+                    name="dimension"
+                    type="text"
                     value={selectedHouse.dimension}
                     onChange={(e) =>
                       setSelectedHouse({
@@ -608,7 +875,7 @@ export default function HousesPage() {
                 <Label>
                   Sleeps
                   <Textarea
-                    name="amenities"
+                    name="sleeps"
                     value={selectedHouse.sleeps}
                     onChange={(e) =>
                       setSelectedHouse({
