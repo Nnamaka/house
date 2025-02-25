@@ -13,7 +13,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Facebook, Moon, Map, Sun, Truck } from "lucide-react";
+import { Facebook, Moon, Sun, Truck } from "lucide-react";
 
 function Footerdemo() {
   const [isDarkMode, setIsDarkMode] = React.useState(true);
