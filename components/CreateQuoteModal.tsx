@@ -63,7 +63,7 @@ const CreateQuoteModal = ({
   api?: boolean;
   houseId?: string;
   onClose: () => void;
-  price: number;
+  price?: number;
 }) => {
   const { toast } = useToast();
   const {
