@@ -2,6 +2,7 @@ import React from "react";
 import { Home, Contact } from "lucide-react";
 import { NavBar } from "@/components/ui/tubelight-navbar";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Navbar() {
   const navItems = [
@@ -13,6 +14,7 @@ export default function Navbar() {
 
   return (
     <div className="relative flex w-screen justify-between items-center">
+      <Link href="/">
       <div className="absolute top-3 left-5 z-10 flex items-center">
         <Image
           src="/logo/imm.jpg"
@@ -24,6 +26,7 @@ export default function Navbar() {
         />
         <p className="mt-1">Quality Property</p>
       </div>
+      </Link>
       <NavBar items={navItems} />
       {/* <RainbowButton>sign up</RainbowButton> */}
     </div>

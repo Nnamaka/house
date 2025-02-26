@@ -188,7 +188,7 @@ export default function HouseDetailPage() {
             <div className="mt-8">
               <h2 className="text-xl font-semibold mb-4">HOUSE SECTIONS</h2>
               <Tabs defaultValue={activeTab} className="w-full">
-                <TabsList className="w-full flex flex-wrap mb-4">
+                <TabsList className="w-full flex flex-wrap mb-8">
                   {house.sections.map((section, index) => (
                     <TabsTrigger
                       key={index}
