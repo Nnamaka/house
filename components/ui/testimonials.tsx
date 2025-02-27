@@ -5,7 +5,7 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Icons } from "@/components/ui/icons";
+// import { Icons } from "@/components/ui/icons";
 import { DotPattern } from "@/components/ui/dot-pattern";
 
 interface Testimonial {
@@ -33,9 +33,9 @@ export function Testimonials({
 }: TestimonialsProps) {
   const [showAll, setShowAll] = useState(false);
 
-  const openInNewTab = (url: string) => {
-    window.open(url, "_blank")?.focus();
-  };
+  // const openInNewTab = (url: string) => {
+  //   window.open(url, "_blank")?.focus();
+  // };
 
   return (
     <div className={className}>
@@ -101,12 +101,12 @@ export function Testimonials({
                     {testimonial.text}
                   </p>
                 </div>
-                <button
+                {/* <button
                   onClick={() => openInNewTab(testimonial.social)}
                   className="absolute top-4 right-4 hover:opacity-80 transition-opacity"
                 >
                   <Icons.twitter className="h-4 w-4" aria-hidden="true" />
-                </button>
+                </button> */}
               </Card>
             ))}
         </div>
