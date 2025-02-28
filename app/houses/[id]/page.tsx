@@ -185,6 +185,7 @@ export default function HouseDetailPage() {
             </div>
           ))}
         </div>
+        
 
         {/* Image Viewer Modal */}
         {showImageViewer && house.images.length > 0 && (
