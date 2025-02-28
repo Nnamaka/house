@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -79,21 +79,35 @@ export default function HouseDetailPage() {
     });
   }
 
-  // Handle image navigation
-  const showNextImage = () => {
-    if (!house) return;
-    setCurrentImageIndex((prevIndex) =>
-      prevIndex === house.images.length - 1 ? 0 : prevIndex + 1
-    );
-  };
+  // // Handle image navigation
+  // const showNextImage = () => {
+  //   if (!house) return;
+  //   setCurrentImageIndex((prevIndex) =>
+  //     prevIndex === house.images.length - 1 ? 0 : prevIndex + 1
+  //   );
+  // };
 
-  const showPrevImage = () => {
-    if (!house) return;
-    setCurrentImageIndex((prevIndex) =>
-      prevIndex === 0 ? house.images.length - 1 : prevIndex - 1
-    );
-  };
+  // const showPrevImage = () => {
+  //   if (!house) return;
+  //   setCurrentImageIndex((prevIndex) =>
+  //     prevIndex === 0 ? house.images.length - 1 : prevIndex - 1
+  //   );
+  // };
 
+    // Wrap these functions in useCallback
+    const showNextImage = useCallback(() => {
+      if (!house) return;
+      setCurrentImageIndex((prevIndex) => 
+        prevIndex === house.images.length - 1 ? 0 : prevIndex + 1
+      );
+    }, [house]);
+  
+    const showPrevImage = useCallback(() => {
+      if (!house) return;
+      setCurrentImageIndex((prevIndex) => 
+        prevIndex === 0 ? house.images.length - 1 : prevIndex - 1
+      );
+    }, [house]);
   // Open image viewer with specific image
   const openImageViewer = (index: number) => {
     setCurrentImageIndex(index);
@@ -127,7 +141,7 @@ export default function HouseDetailPage() {
       window.removeEventListener("keydown", handleKeyDown);
       document.body.style.overflow = "auto";
     };
-  }, [showImageViewer]);
+  }, [showImageViewer, showNextImage,showPrevImage]);
 
   useEffect(() => {
     async function fetchHouse() {
@@ -185,7 +199,7 @@ export default function HouseDetailPage() {
             </div>
           ))}
         </div>
-        
+
 
         {/* Image Viewer Modal */}
         {showImageViewer && house.images.length > 0 && (
