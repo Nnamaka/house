@@ -79,21 +79,6 @@ export default function HouseDetailPage() {
     });
   }
 
-  // // Handle image navigation
-  // const showNextImage = () => {
-  //   if (!house) return;
-  //   setCurrentImageIndex((prevIndex) =>
-  //     prevIndex === house.images.length - 1 ? 0 : prevIndex + 1
-  //   );
-  // };
-
-  // const showPrevImage = () => {
-  //   if (!house) return;
-  //   setCurrentImageIndex((prevIndex) =>
-  //     prevIndex === 0 ? house.images.length - 1 : prevIndex - 1
-  //   );
-  // };
-
     // Wrap these functions in useCallback
     const showNextImage = useCallback(() => {
       if (!house) return;
