@@ -99,6 +99,7 @@ export default function HouseDetailPage() {
     setShowImageViewer(true);
   };
 
+  
   // Handle keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
