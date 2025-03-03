@@ -12,6 +12,7 @@ type QuoteEmailData = {
     phone: string;
     customizationRequests: string;
     houseId: string;
+    houseTitle: string;
     preferredFinancing?: FinancingType;
     desiredMoveInDate?: string;
     estimatedBudget?: string;
@@ -33,7 +34,8 @@ export async function POST(req: Request) {
       !data.email ||
       !data.phone ||
       !data.customizationRequests ||
-      !data.houseId
+      !data.houseId ||
+      !data.houseTitle
     ) {
       return NextResponse.json(
         { error: "Missing required fields" },
@@ -51,6 +53,7 @@ export async function POST(req: Request) {
         phone: data.phone,
         customizationRequests: data.customizationRequests,
         houseId: data.houseId,
+        houseTitle: data.houseTitle,
         // Optional fields
         preferredFinancing: data.preferredFinancing || undefined,
         desiredMoveInDate: data.desiredMoveInDate
@@ -84,7 +87,7 @@ async function sendQuoteEmail(quoteData: QuoteEmailData) {
 
   const mailOptions = {
     from: process.env.EMAIL_USER,
-    to: ADMIN_EMAIL[0],
+    to: ADMIN_EMAIL[1],
     subject: "New Quote Request",
     text: `New Quote Request:
     

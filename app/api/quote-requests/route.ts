@@ -28,6 +28,7 @@ export async function POST(req: Request) {
         phone: data.phone,
         customizationRequests: data.customizationRequests,
         houseId: data.houseId,
+        houseTitle: data.houseTitle,
         // Optional fields
         preferredFinancing: data.preferredFinancing || undefined,
         desiredMoveInDate: data.desiredMoveInDate

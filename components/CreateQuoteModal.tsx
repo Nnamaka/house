@@ -43,6 +43,8 @@ const quoteSchema = z.object({
     .string()
     .min(5, "Customization request must be at least 5 characters"),
   houseId: z.string().min(1, "House ID is required"),
+  houseTitle: z.string().min(1, "House Title is required"),
+
   // Optional fields
   preferredFinancing: z
     .enum(["CASH", "MORTGAGE", "LEASE_TO_OWN", "UNDECIDED"])
@@ -56,12 +58,14 @@ const CreateQuoteModal = ({
   isOpen,
   api,
   houseId,
+  houseTitle,
   onClose,
-  price
+  price,
 }: {
   isOpen: boolean;
   api?: boolean;
   houseId?: string;
+  houseTitle?: string;
   onClose: () => void;
   price?: number;
 }) => {
@@ -77,7 +81,6 @@ const CreateQuoteModal = ({
     resolver: zodResolver(quoteSchema),
   });
 
-
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -85,8 +88,11 @@ const CreateQuoteModal = ({
       setValue("houseId", houseId); // Set houseId when modal opens
       setValue("estimatedBudget", price);
     }
-  }, [houseId, setValue, price]);
-  
+    if (houseTitle) {
+      setValue("houseTitle", houseTitle); // Set houseTitle when modal opens
+    }
+  }, [houseId, houseTitle, setValue, price]);
+
   const onSubmit = async (data: QuoteFormData) => {
     try {
       setLoading(true);
@@ -100,7 +106,7 @@ const CreateQuoteModal = ({
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(data),
         });
-  
+
         if (!emailResponse.ok) throw new Error("Failed to send email");
       }
 
@@ -131,7 +137,6 @@ const CreateQuoteModal = ({
   const moveInDate = watch("desiredMoveInDate");
 
   return (
-   
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="w-[480px] p-7">
         <DialogHeader>
@@ -272,6 +277,18 @@ const CreateQuoteModal = ({
           </div>
 
           <div>
+            <label className="block text-sm font-medium">House Title</label>
+            <Input
+              {...register("houseTitle")}
+              readOnly
+              className="bg-gray-100 cursor-not-allowed text-gray-700"
+              style={{ pointerEvents: "none" }}
+              tabIndex={-1}
+              aria-readonly={true}
+            />
+          </div>
+
+          <div>
             <label className="block text-sm font-medium">House ID</label>
             <Input {...register("houseId")} placeholder="Enter House ID" />
             {errors.houseId && (
@@ -284,7 +301,13 @@ const CreateQuoteModal = ({
               Cancel
             </Button>
             <Button type="submit" disabled={loading}>
-              {!api ? loading ? "Creating..." : "Create Quote": loading ? "Requesting..." : "Request Quote"}
+              {!api
+                ? loading
+                  ? "Creating..."
+                  : "Create Quote"
+                : loading
+                ? "Requesting..."
+                : "Request Quote"}
             </Button>
           </div>
         </form>

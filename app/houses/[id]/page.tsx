@@ -362,6 +362,7 @@ export default function HouseDetailPage() {
           api={true}
           isOpen={showModal}
           houseId={house.id}
+          houseTitle={house.title}
           onClose={() => setShowModal(false)}
           price={house.price}
         />

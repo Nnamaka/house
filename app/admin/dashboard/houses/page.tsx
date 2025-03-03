@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/lib/supabase";
-import { Loader, Trash2, Plus,  X  } from "lucide-react";
+import { Loader, Trash2, Plus, X } from "lucide-react";
 // import { features } from "process";
 
 // new
@@ -23,7 +23,6 @@ interface HouseSection {
   name: string;
   features: string[];
 }
-
 
 interface House {
   id: string;
@@ -61,12 +60,13 @@ export default function HousesPage() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [tempUploadedImages, setTempUploadedImages] = useState<string[]>([]);
+  const [searchPrice, setSearchPrice] = useState("");
 
   // new
-  const [ newSection, setNewSection ] = useState({
+  const [newSection, setNewSection] = useState({
     name: "",
     featuresInput: "",
-  })
+  });
 
   useEffect(() => {
     const fetchHouses = async () => {
@@ -114,6 +114,47 @@ export default function HousesPage() {
     }
   }, [isOpen, isCreating, tempUploadedImages]);
 
+  const handleSearch = () => {
+    if (!searchPrice.trim()) {
+      // If search is empty, show all houses
+      const fetchHouses = async () => {
+        const res = await fetch("/api/houses", { method: "GET" });
+        const data = await res.json();
+        setHouses(data);
+      };
+      fetchHouses();
+      return;
+    }
+
+    const priceValue = parseFloat(searchPrice.trim());
+
+    // Filter houses by ID
+    const filteredHouse = houses.filter((house) => house.price === priceValue);
+    if (filteredHouse.length > 0) {
+      setHouses(filteredHouse);
+    } else {
+      setHouses([]);
+    }
+  };
+
+  // Add a function to handle pressing Enter in the search input
+  const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
+
+  // Add a function to reset the search
+  const handleClearSearch = () => {
+    setSearchPrice("");
+    const fetchHouses = async () => {
+      const res = await fetch("/api/houses", { method: "GET" });
+      const data = await res.json();
+      setHouses(data);
+    };
+    fetchHouses();
+  };
+
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -126,27 +167,27 @@ export default function HousesPage() {
 
   // new
   const handleSectionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewSection({ ...newSection, [e.target.name]: e.target.value});
-  }
+    setNewSection({ ...newSection, [e.target.name]: e.target.value });
+  };
 
   const handleAddSection = () => {
     if (!newSection.name.trim()) return;
-    
+
     const features = newSection.featuresInput
-      .split(',')
-      .map(feature => feature.trim())
-      .filter(feature => feature !== '');
-    
+      .split(",")
+      .map((feature) => feature.trim())
+      .filter((feature) => feature !== "");
+
     const section: HouseSection = {
       name: newSection.name.trim(),
       features,
     };
-    
+
     setNewHouse({
       ...newHouse,
       sections: [...newHouse.sections, section],
     });
-    
+
     // Reset form
     setNewSection({ name: "", featuresInput: "" });
   };
@@ -161,27 +202,31 @@ export default function HousesPage() {
   // Handle selected house section changes
   const handleSelectedHouseSectionChange = (
     sectionIndex: number,
-    field: 'name' | 'features',
+    field: "name" | "features",
     value: string | string[]
   ) => {
     if (!selectedHouse) return;
-    
+
     const updatedSections = [...selectedHouse.sections];
-    
-    if (field === 'name') {
+
+    if (field === "name") {
       updatedSections[sectionIndex] = {
         ...updatedSections[sectionIndex],
         name: value as string,
       };
-    } else if (field === 'features') {
+    } else if (field === "features") {
       updatedSections[sectionIndex] = {
         ...updatedSections[sectionIndex],
-        features: typeof value === 'string' 
-          ? (value as string).split(',').map(f => f.trim()).filter(f => f !== '')
-          : value as string[],
+        features:
+          typeof value === "string"
+            ? (value as string)
+                .split(",")
+                .map((f) => f.trim())
+                .filter((f) => f !== "")
+            : (value as string[]),
       };
     }
-    
+
     setSelectedHouse({
       ...selectedHouse,
       sections: updatedSections,
@@ -191,22 +236,22 @@ export default function HousesPage() {
   // Add section to selected house
   const handleAddSectionToSelected = () => {
     if (!selectedHouse || !newSection.name.trim()) return;
-    
+
     const features = newSection.featuresInput
-      .split(',')
-      .map(feature => feature.trim())
-      .filter(feature => feature !== '');
-    
+      .split(",")
+      .map((feature) => feature.trim())
+      .filter((feature) => feature !== "");
+
     const section: HouseSection = {
       name: newSection.name.trim(),
       features,
     };
-    
+
     setSelectedHouse({
       ...selectedHouse,
       sections: [...(selectedHouse.sections || []), section],
     });
-    
+
     // Reset form
     setNewSection({ name: "", featuresInput: "" });
   };
@@ -214,10 +259,10 @@ export default function HousesPage() {
   // Remove section from selected house
   const handleRemoveSectionFromSelected = (index: number) => {
     if (!selectedHouse) return;
-    
+
     const updatedSections = [...selectedHouse.sections];
     updatedSections.splice(index, 1);
-    
+
     setSelectedHouse({
       ...selectedHouse,
       sections: updatedSections,
@@ -286,7 +331,7 @@ export default function HousesPage() {
           ...newHouse,
           price: parseFloat(newHouse.price),
           features: newHouse.features.split(",").map((f) => f.trim()),
-          sections: newHouse.sections // new
+          sections: newHouse.sections, // new
         }),
       });
 
@@ -371,7 +416,7 @@ export default function HousesPage() {
       const updatedHouse = {
         ...selectedHouse,
         features: selectedHouse.features.map((f) => f.trim()), // Ensure array type
-        sections: selectedHouse.sections || [] // new
+        sections: selectedHouse.sections || [], // new
       };
 
       const res = await fetch(`/api/houses/${selectedHouse.id}`, {
@@ -504,17 +549,17 @@ export default function HousesPage() {
               <Label className="flex justify-between items-center">
                 <span>House Sections</span>
               </Label>
-            {/* New */}
-            {/* Sections of the house */}
-            {newHouse.sections.length > 0 && (
+              {/* New */}
+              {/* Sections of the house */}
+              {newHouse.sections.length > 0 && (
                 <div className="border rounded-md p-3 mb-3 space-y-3">
                   {newHouse.sections.map((section, idx) => (
                     <div key={idx} className="p-2 bg-gray-50 rounded relative">
                       <h4 className="font-medium">{section.name}</h4>
                       <p className="text-sm text-gray-600">
-                        {section.features.join(', ')}
+                        {section.features.join(", ")}
                       </p>
-                      <button 
+                      <button
                         onClick={() => handleRemoveSection(idx)}
                         className="absolute top-2 right-2 text-red-500"
                         type="button"
@@ -546,8 +591,8 @@ export default function HousesPage() {
                     placeholder="e.g., Gas Cooker, Heater, Cabinets"
                   />
                 </div>
-                <Button 
-                  type="button" 
+                <Button
+                  type="button"
                   onClick={handleAddSection}
                   className="w-full"
                   variant="outline"
@@ -558,7 +603,7 @@ export default function HousesPage() {
                 </Button>
               </div>
             </div>
-            
+
             <div>
               <Label>Bedrooms</Label>
               <Input
@@ -642,6 +687,35 @@ export default function HousesPage() {
         </DialogContent>
       </Dialog>
 
+      <div className="flex mb-4 gap-2">
+        <div className="relative flex-1">
+          <Input
+            type="number"
+            placeholder="Search by price"
+            value={searchPrice}
+            onChange={(e) => setSearchPrice(e.target.value)}
+            onKeyDown={handleSearchKeyDown}
+            className="pr-8"
+          />
+          {searchPrice && (
+            <button
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              onClick={handleClearSearch}
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+        <Button onClick={handleSearch}>Search</Button>
+      </div>
+
+      {/* Message when no houses are found */}
+      {houses.length === 0 && (
+        <div className="text-center py-8 text-gray-500">
+          No houses found with price: {searchPrice}
+        </div>
+      )}
+
       <ul className="space-y-4">
         {houses.map((house) => (
           <li
@@ -657,7 +731,10 @@ export default function HousesPage() {
                 <p className="text-sm font-medium">Sections:</p>
                 <div className="flex flex-wrap gap-1 mt-1">
                   {house.sections.map((section, idx) => (
-                    <span key={idx} className="text-xs bg-gray-100 px-2 py-1 rounded">
+                    <span
+                      key={idx}
+                      className="text-xs bg-gray-100 px-2 py-1 rounded"
+                    >
                       {section.name}
                     </span>
                   ))}
@@ -691,6 +768,18 @@ export default function HousesPage() {
             </DialogHeader>
 
             <div className="space-y-4 pr-4">
+              <div>
+                <Label>House ID</Label>
+                <Input
+                  type="text"
+                  value={selectedHouse?.id || ""}
+                  readOnly
+                  className="bg-gray-100 cursor-not-allowed text-gray-700"
+                  style={{ pointerEvents: "none" }}
+                  tabIndex={-1}
+                  aria-readonly={true}
+                />
+              </div>
               <div>
                 <Label>Title</Label>
                 <Input
@@ -756,38 +845,50 @@ export default function HousesPage() {
                 <Label className="flex justify-between items-center">
                   <span>House Sections</span>
                 </Label>
-                
+
                 {/* List of existing sections */}
-                {selectedHouse.sections && selectedHouse.sections.length > 0 && (
-                  <div className="border rounded-md p-3 mb-3 space-y-3">
-                    {selectedHouse.sections.map((section, idx) => (
-                      <div key={idx} className="p-2 bg-gray-50 rounded relative">
-                        <Input
-                          className="mb-1"
-                          value={section.name}
-                          onChange={(e) => 
-                            handleSelectedHouseSectionChange(idx, 'name', e.target.value)
-                          }
-                        />
-                        <Input
-                          value={section.features.join(', ')}
-                          onChange={(e) => 
-                            handleSelectedHouseSectionChange(idx, 'features', e.target.value)
-                          }
-                          placeholder="Features (comma separated)"
-                        />
-                        <button 
-                          onClick={() => handleRemoveSectionFromSelected(idx)}
-                          className="absolute top-2 right-2 text-red-500"
-                          type="button"
+                {selectedHouse.sections &&
+                  selectedHouse.sections.length > 0 && (
+                    <div className="border rounded-md p-3 mb-3 space-y-3">
+                      {selectedHouse.sections.map((section, idx) => (
+                        <div
+                          key={idx}
+                          className="p-2 bg-gray-50 rounded relative"
                         >
-                          <X className="h-4 w-4" />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                )}
-                
+                          <Input
+                            className="mb-1"
+                            value={section.name}
+                            onChange={(e) =>
+                              handleSelectedHouseSectionChange(
+                                idx,
+                                "name",
+                                e.target.value
+                              )
+                            }
+                          />
+                          <Input
+                            value={section.features.join(", ")}
+                            onChange={(e) =>
+                              handleSelectedHouseSectionChange(
+                                idx,
+                                "features",
+                                e.target.value
+                              )
+                            }
+                            placeholder="Features (comma separated)"
+                          />
+                          <button
+                            onClick={() => handleRemoveSectionFromSelected(idx)}
+                            className="absolute top-2 right-2 text-red-500"
+                            type="button"
+                          >
+                            <X className="h-4 w-4" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
                 {/* Form to add a new section */}
                 <div className="border rounded-md p-3 space-y-2">
                   <div>
@@ -801,7 +902,9 @@ export default function HousesPage() {
                     />
                   </div>
                   <div>
-                    <Label className="text-sm">Features (comma separated)</Label>
+                    <Label className="text-sm">
+                      Features (comma separated)
+                    </Label>
                     <Input
                       type="text"
                       name="featuresInput"
@@ -810,8 +913,8 @@ export default function HousesPage() {
                       placeholder="e.g., Gas Cooker, Heater, Cabinets"
                     />
                   </div>
-                  <Button 
-                    type="button" 
+                  <Button
+                    type="button"
                     onClick={handleAddSectionToSelected}
                     className="w-full"
                     variant="outline"
@@ -822,7 +925,7 @@ export default function HousesPage() {
                   </Button>
                 </div>
               </div>
-              
+
               <div>
                 <Label>
                   Bedrooms
