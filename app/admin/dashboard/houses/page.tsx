@@ -115,18 +115,15 @@ export default function HousesPage() {
     }
   }, [isOpen, isCreating, tempUploadedImages]);
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     if (!searchTerm.trim()) {
       setIsLoading(true);
       // If search is empty, show all houses
 
       try {
-        const fetchHouses = async () => {
-          const res = await fetch("/api/houses", { method: "GET" });
-          const data = await res.json();
-          setHouses(data);
-        };
-        fetchHouses();
+        const res = await fetch("/api/houses", { method: "GET" });
+        const data = await res.json();
+        setHouses(data);
       } catch {
         console.error("Error fetching houses..");
       } finally {
@@ -169,44 +166,42 @@ export default function HousesPage() {
             setHouses([]);
           }
         } else {
+          // Search by title (case-insensitive partial match)
+          const filteredHouses = houses.filter((house) =>
+            house.title.toLowerCase().includes(term.toLowerCase())
+          );
           // Invalid search term
-          setHouses([]);
+          if (filteredHouses.length > 0) {
+            setHouses(filteredHouses);
+          } else {
+            setHouses([]);
+          }
         }
       }
+
+      // Add a small delay to make the loading state visible (optional)
+      await new Promise((resolve) => setTimeout(resolve, 500));
     } catch {
       console.error("Error during search..");
     } finally {
       setIsLoading(false);
     }
-
-    // const filteredHouse = houses.filter((house) => house.price === priceValue);
-    // if (filteredHouse.length > 0) {
-    //   setHouses(filteredHouse);
-    // } else {
-    //   setHouses([]);
-    // }
   };
 
-  // Add a function to handle pressing Enter in the search input
   const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && !isLoading) {
       handleSearch();
     }
   };
 
-  // Add a function to reset the search
-  const handleClearSearch = () => {
-    // setSearchPrice("");
+  const handleClearSearch = async () => {
     setSearchTerm("");
     setIsLoading(true);
 
     try {
-      const fetchHouses = async () => {
-        const res = await fetch("/api/houses", { method: "GET" });
-        const data = await res.json();
-        setHouses(data);
-      };
-      fetchHouses();
+      const res = await fetch("/api/houses", { method: "GET" });
+      const data = await res.json();
+      setHouses(data);
     } catch {
       console.error("Error clearing search...");
     } finally {
@@ -750,7 +745,7 @@ export default function HousesPage() {
         <div className="relative flex-1">
           <Input
             type="text"
-            placeholder="Search by ID or price"
+            placeholder="Search by ID, price or title"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             onKeyDown={handleSearchKeyDown}
