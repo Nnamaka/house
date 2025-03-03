@@ -90,8 +90,9 @@ async function sendQuoteEmail(quoteData: QuoteEmailData) {
     to: ADMIN_EMAIL[1],
     subject: "New Quote Request",
     text: `New Quote Request:
-    
-    Name: ${quoteData.firstName} ${quoteData.lastName}
+
+    House: ${quoteData.houseTitle}
+    Customer Name: ${quoteData.firstName} ${quoteData.lastName}
     Email: ${quoteData.email}
     Phone: ${quoteData.phone}
     House ID: ${quoteData.houseId}
