@@ -15,8 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/lib/supabase";
-import { Loader, Trash2, Plus, X } from "lucide-react";
-// import { features } from "process";
+import { Loader, Loader2, Trash2, Plus, X } from "lucide-react";
 
 // new
 interface HouseSection {
@@ -60,7 +59,9 @@ export default function HousesPage() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [tempUploadedImages, setTempUploadedImages] = useState<string[]>([]);
-  const [searchPrice, setSearchPrice] = useState("");
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   // new
   const [newSection, setNewSection] = useState({
@@ -115,44 +116,102 @@ export default function HousesPage() {
   }, [isOpen, isCreating, tempUploadedImages]);
 
   const handleSearch = () => {
-    if (!searchPrice.trim()) {
+    if (!searchTerm.trim()) {
+      setIsLoading(true);
       // If search is empty, show all houses
-      const fetchHouses = async () => {
-        const res = await fetch("/api/houses", { method: "GET" });
-        const data = await res.json();
-        setHouses(data);
-      };
-      fetchHouses();
+
+      try {
+        const fetchHouses = async () => {
+          const res = await fetch("/api/houses", { method: "GET" });
+          const data = await res.json();
+          setHouses(data);
+        };
+        fetchHouses();
+      } catch {
+        console.error("Error fetching houses..");
+      } finally {
+        setIsLoading(false);
+      }
       return;
     }
 
-    const priceValue = parseFloat(searchPrice.trim());
+    setIsLoading(true);
 
-    // Filter houses by ID
-    const filteredHouse = houses.filter((house) => house.price === priceValue);
-    if (filteredHouse.length > 0) {
-      setHouses(filteredHouse);
-    } else {
-      setHouses([]);
+    try {
+      const term = searchTerm.trim();
+
+      // Check if the search term looks like a UUID (house ID)
+      const isUuid =
+        /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+          term
+        );
+
+      if (isUuid) {
+        // Search by ID
+        const filteredHouse = houses.find((house) => house.id === term);
+        if (filteredHouse) {
+          setHouses([filteredHouse]);
+        } else {
+          setHouses([]);
+        }
+      } else {
+        // Try to convert to number for price search
+        const priceValue = parseFloat(term);
+
+        if (!isNaN(priceValue)) {
+          // Search by price
+          const filteredHouses = houses.filter(
+            (house) => house.price === priceValue
+          );
+          if (filteredHouses.length > 0) {
+            setHouses(filteredHouses);
+          } else {
+            setHouses([]);
+          }
+        } else {
+          // Invalid search term
+          setHouses([]);
+        }
+      }
+    } catch {
+      console.error("Error during search..");
+    } finally {
+      setIsLoading(false);
     }
+
+    // const filteredHouse = houses.filter((house) => house.price === priceValue);
+    // if (filteredHouse.length > 0) {
+    //   setHouses(filteredHouse);
+    // } else {
+    //   setHouses([]);
+    // }
   };
 
   // Add a function to handle pressing Enter in the search input
   const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && !isLoading) {
       handleSearch();
     }
   };
 
   // Add a function to reset the search
   const handleClearSearch = () => {
-    setSearchPrice("");
-    const fetchHouses = async () => {
-      const res = await fetch("/api/houses", { method: "GET" });
-      const data = await res.json();
-      setHouses(data);
-    };
-    fetchHouses();
+    // setSearchPrice("");
+    setSearchTerm("");
+    setIsLoading(true);
+
+    try {
+      const fetchHouses = async () => {
+        const res = await fetch("/api/houses", { method: "GET" });
+        const data = await res.json();
+        setHouses(data);
+      };
+      fetchHouses();
+    } catch {
+      console.error("Error clearing search...");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleChange = (
@@ -690,14 +749,14 @@ export default function HousesPage() {
       <div className="flex mb-4 gap-2">
         <div className="relative flex-1">
           <Input
-            type="number"
-            placeholder="Search by price"
-            value={searchPrice}
-            onChange={(e) => setSearchPrice(e.target.value)}
+            type="text"
+            placeholder="Search by ID or price"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             onKeyDown={handleSearchKeyDown}
             className="pr-8"
           />
-          {searchPrice && (
+          {searchTerm && !isLoading && (
             <button
               className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
               onClick={handleClearSearch}
@@ -705,14 +764,21 @@ export default function HousesPage() {
               <X className="h-4 w-4" />
             </button>
           )}
+          {isLoading && (
+            <div className="absolute right-2 top-1/2 transform -translate-y-1/2">
+              <Loader2 className="h-4 w-4 animate-spin text-gray-500" />
+            </div>
+          )}
         </div>
-        <Button onClick={handleSearch}>Search</Button>
+        <Button onClick={handleSearch} disabled={isLoading}>
+          {isLoading ? "Searching..." : "Search"}
+        </Button>
       </div>
 
       {/* Message when no houses are found */}
       {houses.length === 0 && (
         <div className="text-center py-8 text-gray-500">
-          No houses found with price: {searchPrice}
+          No houses found with : {searchTerm}
         </div>
       )}
 
