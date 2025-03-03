@@ -20,6 +20,7 @@ async function getQuotes(): Promise<QuoteRequest[]> {
       },
     });
 
+    // console.log("quote data", quotes);
     // return quotes;
     return quotes.map((quote) => ({
       ...quote,
